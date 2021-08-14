@@ -2,20 +2,22 @@ package bar
 
 import (
 	"down_tip/service"
+	_ "embed"
 	"github.com/getlantern/systray"
-	"github.com/getlantern/systray/example/icon"
+	"github.com/go-vgo/robotgo"
 	"time"
 )
 
+//go:embed ico.png
+var iconBs []byte
+
 func OnReady() {
 	//设置程序基本图标等等。。
-	systray.SetTemplateIcon(icon.Data, icon.Data)
+	systray.SetTemplateIcon(iconBs, iconBs)
 	systray.SetTooltip("关于这个程序。。。")
 
 	//画状态栏UI
 	go func() {
-		// 定时更新 Title 显示剩余时间
-		systray.SetTemplateIcon(icon.Data, icon.Data)
 		go func() {
 			for {
 				systray.SetTitle(service.GetTheRemainingTime())
@@ -33,7 +35,8 @@ func OnReady() {
 		sub30m := todaySTimeItem.AddSubMenuItem("减少30分钟", "操作今日时间-30m")
 		sub5m := todaySTimeItem.AddSubMenuItem("减少5分钟", "操作今日时间-5m")
 		sub1m := todaySTimeItem.AddSubMenuItem("减少1分钟", "操作今日时间-1m")
-
+		//当前ip
+		ipItem := systray.AddMenuItem("当前IP:"+service.GetIpInfo("").IP, "当前ip")
 		//程序退出以及处理方法
 		mQuitOrig := systray.AddMenuItem("Quit", "退出这个程序")
 		//item菜单按钮事件处理
@@ -57,6 +60,10 @@ func OnReady() {
 				todaySTimeItem.SetTitle(service.AddStartingTimeToday(-5 * time.Minute))
 			case <-sub1m.ClickedCh:
 				todaySTimeItem.SetTitle(service.AddStartingTimeToday(-1 * time.Minute))
+			case <-ipItem.ClickedCh:
+				info := service.GetIpInfo("")
+				ipItem.SetTitle("当前IP:" + info.IP)
+				robotgo.WriteAll(info.IP)
 			case <-mQuitOrig.ClickedCh:
 				systray.Quit()
 			}

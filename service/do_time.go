@@ -31,12 +31,19 @@ func AddStartingTimeToday(duration time.Duration) string {
 	return GetStartingTimeToday()
 }
 func MonitorReset() {
+	m := make(map[uint]struct{})
 	for {
-		//now := time.Now()
-		//i := now.Hour() - config.Conf.GetStartHour()
-		if keyboard.Activity() {
-			logs.Info("处于活动状态，重置时间")
-			ResetTime()
+		now := time.Now()
+		i := now.Hour() - int(config.Conf.GetStartHour())
+		if _, has := m[config.Conf.GetStartHour()]; !has {
+			if i == -1 {
+				m[config.Conf.GetStartHour()] = struct{}{}
+				if keyboard.Activity() {
+					logs.Info("处于活动状态，重置时间")
+					ResetTime()
+
+				}
+			}
 		}
 	}
 
