@@ -17,9 +17,6 @@ func ExportModule() *core.Module {
 	return keyLog
 }
 func onReady(item *systray.MenuItem) {
-	go func() {
-
-	}()
 	select {
 	case <-item.ClickedCh:
 		info := getIpInfo("")
