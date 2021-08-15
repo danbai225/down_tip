@@ -1,11 +1,34 @@
-package service
+package ip
 
 import (
+	"down_tip/core"
 	"encoding/json"
 	"github.com/axgle/mahonia"
+	"github.com/getlantern/systray"
+	"github.com/go-vgo/robotgo"
 	"io/ioutil"
 	"net/http"
 )
+
+var keyLog *core.Module
+
+func ExportModule() *core.Module {
+	keyLog = core.NewModule("ip:"+getIpInfo("").IP, "ip", onReady, exit)
+	return keyLog
+}
+func onReady(item *systray.MenuItem) {
+	go func() {
+
+	}()
+	select {
+	case <-item.ClickedCh:
+		info := getIpInfo("")
+		robotgo.WriteAll(info.IP)
+	}
+}
+func exit() {
+
+}
 
 type ipInfo struct {
 	IP          string `json:"ip"`
@@ -20,7 +43,7 @@ type ipInfo struct {
 	Err         string `json:"err"`
 }
 
-func GetIpInfo(ip string) ipInfo {
+func getIpInfo(ip string) ipInfo {
 	info := ipInfo{}
 	get, err := http.Get("http://whois.pconline.com.cn/ipJson.jsp?json=true&ip=" + ip)
 	if err != nil {

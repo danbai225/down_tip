@@ -1,5 +1,9 @@
 {
-  "start_time": "09:00",
-  "end_time": "18:00",
-  "elasticity": false
+  "module":{
+    "down": {
+      "start_time": "09:00",
+      "end_time": "18:00",
+      "elasticity": false
+    }
+  }
 }

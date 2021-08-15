@@ -1,23 +1,19 @@
 package main
 
 import (
-	"down_tip/bar"
-	"down_tip/config"
-	"down_tip/routing"
-	"down_tip/service"
+	"down_tip/core"
+	"down_tip/module/down"
+	"down_tip/module/ip"
+	"down_tip/module/keylog"
 	logs "github.com/danbai225/go-logs"
-	"github.com/getlantern/systray"
-	"github.com/gogf/gf/frame/g"
 )
 
 func main() {
-	logs.Info("程序启动...")
-	config.InitConfig()
-	go service.Init()
-
-	s := g.Server()
-	s.SetPort(7989)
-	routing.Routing(s)
-	go s.Run()
-	systray.Run(bar.OnReady, func() {})
+	a := core.NewApp()
+	a.RegisterModule(down.ExportModule(), keylog.ExportModule(), ip.ExportModule())
+	err := a.Run()
+	if err != nil {
+		logs.Err(err)
+		return
+	}
 }
