@@ -1,6 +1,7 @@
 package service
 
 import (
+	logs "github.com/danbai225/go-logs"
 	hook "github.com/robotn/gohook"
 )
 
@@ -16,12 +17,21 @@ func monitorInput() {
 	for ev := range EvChan {
 		if ev.Kind == hook.KeyDown {
 			if _, has := keyLog[byte(ev.Keychar)]; !has {
+				logs.Info(ev.String())
 				keyLog[byte(ev.Keychar)] = 1
 			}
 			keyLog[byte(ev.Keychar)]++
 		}
 	}
 }
-func GetKeyLog() map[byte]uint64 {
-	return keyLog
+func GetKeyLog() interface{} {
+	type Key struct {
+		KeyCode byte
+		Val     uint64
+	}
+	keys := make([]Key, 0)
+	for b, u := range keyLog {
+		keys = append(keys, Key{KeyCode: b, Val: u})
+	}
+	return keys
 }

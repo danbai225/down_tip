@@ -19,6 +19,5 @@ func main() {
 	s.SetPort(7989)
 	routing.Routing(s)
 	go s.Run()
-
 	systray.Run(bar.OnReady, func() {})
 }

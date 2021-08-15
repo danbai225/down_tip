@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-//go:embed ico.png
+//go:embed ico.ico
 var iconBs []byte
 
 func OnReady() {

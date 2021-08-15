@@ -16,6 +16,9 @@ func GetTheRemainingTime() string {
 	tm := sub - time.Duration(h)*time.Hour
 	m := uint(tm.Minutes())
 	s := uint((tm - time.Duration(m)*time.Minute).Seconds())
+	if s < 0 || s > 60 {
+		return " no Time"
+	}
 	return fmt.Sprintf("%s:%s:%s", utils.ComplementZero(h), utils.ComplementZero(m), utils.ComplementZero(s))
 }
 func ResetTime() {
@@ -41,7 +44,6 @@ func MonitorReset() {
 				if keyboard.Activity() {
 					logs.Info("处于活动状态，重置时间")
 					ResetTime()
-
 				}
 			}
 		}
