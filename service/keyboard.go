@@ -2,6 +2,7 @@ package service
 
 import (
 	logs "github.com/danbai225/go-logs"
+	"github.com/go-vgo/robotgo"
 	hook "github.com/robotn/gohook"
 )
 
@@ -12,8 +13,8 @@ var keyLog map[byte]uint64
 
 func monitorInput() {
 	keyLog = make(map[byte]uint64)
-	EvChan := hook.Start()
-	defer hook.End()
+	EvChan := robotgo.EventStart()
+	defer robotgo.StopEvent()
 	for ev := range EvChan {
 		if ev.Kind == hook.KeyDown {
 			if _, has := keyLog[byte(ev.Keychar)]; !has {
