@@ -37,32 +37,35 @@ func exit() {
 //键码
 //http://www.atoolbox.net/Tool.php?Id=815
 
-var keyLogMap map[byte]uint64
+var keyLogMap map[uint16]*Key
+
+type Key struct {
+	KeyRawCode uint16
+	Val        uint64
+	KeyName    string
+}
 
 func monitorInput() {
-	keyLogMap = make(map[byte]uint64)
+	keyLogMap = make(map[uint16]*Key)
+	for k, v := range keyMap {
+		keyLogMap[k] = &Key{
+			KeyRawCode: k,
+			Val:        0,
+			KeyName:    v,
+		}
+	}
 	EvChan := hook.Start()
 	defer hook.StopEvent()
 	for ev := range EvChan {
-		if ev.Kind == hook.KeyDown {
-			if _, has := keyLogMap[byte(ev.Keychar)]; !has {
-				keyLogMap[byte(ev.Keychar)] = 1
+		if ev.Kind == hook.KeyHold {
+			if _, has := keyLogMap[ev.Rawcode]; has {
+				keyLogMap[ev.Rawcode].Val++
 			}
-			keyLogMap[byte(ev.Keychar)]++
 		}
 	}
 }
-func getKeyLog() interface{} {
-	type Key struct {
-		KeyCode byte
-		Val     uint64
-		KeyName string
-	}
-	keys := make([]Key, 0)
-	for b, u := range keyLogMap {
-		keys = append(keys, Key{KeyCode: b, Val: u, KeyName: getKeyNameByKeyCode(int(b))})
-	}
-	return keys
+func getKeyLog() map[uint16]*Key {
+	return keyLogMap
 }
 
 func middlewareCORS(r *ghttp.Request) {
