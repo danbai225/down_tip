@@ -28,6 +28,7 @@ func getStartingTimeToday() string {
 func addStartingTimeToday(duration time.Duration) string {
 	conf.StartingTimeToday = conf.StartingTimeToday.Add(duration)
 	log.Println(conf.StartingTimeToday.Format("15:04:05"))
+	calculateDownTime()
 	return getStartingTimeToday()
 }
 func complementZero(i uint) string {
