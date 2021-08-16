@@ -105,10 +105,3 @@ var keyMap = map[uint16]string{
 	30:  "]}",
 	39:  "\u0027\"",
 }
-
-func getKeyNameByKeyCode(code uint16) string {
-	if name, has := keyMap[code]; has {
-		return name
-	}
-	return ""
-}
