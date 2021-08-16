@@ -7,8 +7,18 @@ import (
 	"down_tip/module/keylog"
 	"down_tip/module/qrcode"
 	logs "github.com/danbai225/go-logs"
+	"os"
+	"path/filepath"
 )
 
+func init() {
+	dir, err := filepath.Abs(filepath.Dir(os.Args[0]))
+	if err != nil {
+		return
+	}
+	err = os.Chdir(dir)
+	return
+}
 func main() {
 	a := core.NewApp()
 	//注册模块

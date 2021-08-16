@@ -22,7 +22,7 @@ type App struct {
 }
 
 func NewApp() *App {
-	return &App{config: config{}, title: make([]*title, 0), module: make([]*Module, 0), tip: make(chan tip, 10)}
+	return &App{config: config{configName: "config.json"}, title: make([]*title, 0), module: make([]*Module, 0), tip: make(chan tip, 10)}
 }
 func (a *App) addTitle(module *Module, titleText string) {
 	for i := range a.title {
