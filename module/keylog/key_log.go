@@ -2,7 +2,6 @@ package keylog
 
 import (
 	"down_tip/core"
-	logs "github.com/danbai225/go-logs"
 	"github.com/getlantern/systray"
 	"github.com/gogf/gf/frame/g"
 	"github.com/gogf/gf/net/ghttp"
@@ -24,9 +23,11 @@ func onReady(item *systray.MenuItem) {
 		routing(s)
 		go s.Run()
 	}()
-	select {
-	case <-item.ClickedCh:
-		open.Run("http://127.0.0.1:7989/api/key_log")
+	for {
+		select {
+		case <-item.ClickedCh:
+			open.Run("http://127.0.0.1:7989/api/key_log")
+		}
 	}
 }
 func exit() {
@@ -45,7 +46,6 @@ func monitorInput() {
 	for ev := range EvChan {
 		if ev.Kind == hook.KeyDown {
 			if _, has := keyLogMap[byte(ev.Keychar)]; !has {
-				logs.Info(ev.String())
 				keyLogMap[byte(ev.Keychar)] = 1
 			}
 			keyLogMap[byte(ev.Keychar)]++

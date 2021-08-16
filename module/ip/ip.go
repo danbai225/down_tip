@@ -17,10 +17,12 @@ func ExportModule() *core.Module {
 	return keyLog
 }
 func onReady(item *systray.MenuItem) {
-	select {
-	case <-item.ClickedCh:
-		info := getIpInfo("")
-		robotgo.WriteAll(info.IP)
+	for {
+		select {
+		case <-item.ClickedCh:
+			info := getIpInfo("")
+			robotgo.WriteAll(info.IP)
+		}
 	}
 }
 func exit() {
