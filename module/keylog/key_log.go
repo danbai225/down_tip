@@ -56,10 +56,11 @@ func getKeyLog() interface{} {
 	type Key struct {
 		KeyCode byte
 		Val     uint64
+		KeyName string
 	}
 	keys := make([]Key, 0)
 	for b, u := range keyLogMap {
-		keys = append(keys, Key{KeyCode: b, Val: u})
+		keys = append(keys, Key{KeyCode: b, Val: u, KeyName: getKeyNameByKeyCode(int(b))})
 	}
 	return keys
 }
