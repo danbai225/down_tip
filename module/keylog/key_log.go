@@ -34,9 +34,6 @@ func exit() {
 	hook.StopEvent()
 }
 
-//键码
-//http://www.atoolbox.net/Tool.php?Id=815
-
 var keyLogMap map[uint16]*Key
 
 type Key struct {
