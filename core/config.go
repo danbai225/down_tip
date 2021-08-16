@@ -29,8 +29,7 @@ func (c *config) load() error {
 		return errors.New("配置文件名为空")
 	}
 	c.Module = make(map[string]interface{})
-	fp := fmt.Sprintf("%s%c%s", ExecPathDir(), os.PathSeparator, c.configName)
-	file, err := ioutil.ReadFile(fp)
+	file, err := ioutil.ReadFile(getConfigPath(c.configName))
 	if err != nil {
 		return err
 	}
@@ -51,7 +50,7 @@ func (c *config) save() error {
 	if err2 != nil {
 		return err2
 	}
-	return ioutil.WriteFile(fmt.Sprintf("%s%c%s", ExecPathDir(), os.PathSeparator, c.configName), marshal, 0644)
+	return ioutil.WriteFile(getConfigPath(c.configName), marshal, 0644)
 }
 func Unmarshal(src, dst interface{}) error {
 	marshal, err := json.Marshal(src)
@@ -59,4 +58,17 @@ func Unmarshal(src, dst interface{}) error {
 		return err
 	}
 	return json.Unmarshal(marshal, dst)
+}
+func getConfigPath(configFileName string) string {
+	_, err := os.Stat(configFileName)
+	if err == nil {
+		return configFileName
+	}
+	exp := fmt.Sprintf("%s%c%s", ExecPathDir(), os.PathSeparator, configFileName)
+	_, err = os.Stat(exp)
+	if err == nil {
+		os.Chdir(ExecPathDir())
+		return exp
+	}
+	return configFileName
 }
