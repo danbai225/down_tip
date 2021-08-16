@@ -83,7 +83,9 @@ func (a *App) doTitle() {
 			systray.SetTitle(t.content)
 			a.titleLock.Unlock()
 			time.Sleep(5 * time.Second)
+			systray.SetTitle("")
 		}
+		time.Sleep(time.Second)
 	}
 }
 func (a *App) onReady() {
