@@ -2,7 +2,9 @@ package keylog
 
 import (
 	"down_tip/core"
+	logs "github.com/danbai225/go-logs"
 	"github.com/getlantern/systray"
+	"github.com/go-vgo/robotgo"
 	"github.com/gogf/gf/frame/g"
 	"github.com/gogf/gf/net/ghttp"
 	hook "github.com/robotn/gohook"
@@ -31,30 +33,31 @@ func onReady(item *systray.MenuItem) {
 	}
 }
 func exit() {
-	hook.StopEvent()
+	robotgo.StopEvent()
 }
 
 //键码
 //http://www.atoolbox.net/Tool.php?Id=815
 
-var keyLogMap map[byte]uint64
+var keyLogMap map[int32]uint64
 
 func monitorInput() {
-	keyLogMap = make(map[byte]uint64)
-	EvChan := hook.Start()
+	keyLogMap = make(map[int32]uint64)
+	EvChan := robotgo.Start()
 	defer hook.StopEvent()
 	for ev := range EvChan {
 		if ev.Kind == hook.KeyDown {
-			if _, has := keyLogMap[byte(ev.Keychar)]; !has {
-				keyLogMap[byte(ev.Keychar)] = 1
+			if _, has := keyLogMap[ev.Keychar]; !has {
+				keyLogMap[ev.Keychar] = 1
 			}
-			keyLogMap[byte(ev.Keychar)]++
+			keyLogMap[ev.Keychar]++
+			logs.Info(string(ev.Keychar), ev.Keychar, ev.Rawcode)
 		}
 	}
 }
 func getKeyLog() interface{} {
 	type Key struct {
-		KeyCode byte
+		KeyCode int32
 		Val     uint64
 		KeyName string
 	}

@@ -1,6 +1,9 @@
 package keylog
 
-import "strconv"
+import (
+	logs "github.com/danbai225/go-logs"
+	"strconv"
+)
 
 var keyMap = map[string]string{
 	"8":   "BackSpace",
@@ -110,6 +113,7 @@ var keyMap = map[string]string{
 }
 
 func getKeyNameByKeyCode(code int) string {
+	logs.Info(code)
 	itoa := strconv.Itoa(code)
 	if name, has := keyMap[itoa]; has {
 		return name
