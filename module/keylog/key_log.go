@@ -7,6 +7,7 @@ import (
 	"github.com/gogf/gf/frame/g"
 	"github.com/gogf/gf/net/ghttp"
 	hook "github.com/robotn/gohook"
+
 	"github.com/skratchdot/open-golang/open"
 )
 
@@ -56,9 +57,9 @@ func monitorInput() {
 	defer hook.StopEvent()
 	for ev := range EvChan {
 		if ev.Kind == hook.KeyHold {
-			logs.Info(keyMap[ev.Rawcode], ev.Rawcode, ev.Keycode)
-			if _, has := keyLogMap[ev.Rawcode]; has {
-				keyLogMap[ev.Rawcode].Val++
+			logs.Info(getKeyName(ev.Keycode), ev.Keycode)
+			if _, has := keyLogMap[ev.Keycode]; has {
+				keyLogMap[ev.Keycode].Val++
 			}
 		}
 	}

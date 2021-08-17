@@ -1,6 +1,5 @@
 package qrcode
 
-import "C"
 import (
 	"bytes"
 	"down_tip/core"
@@ -66,6 +65,10 @@ func readTheQRCode(data []byte) string {
 		return ""
 	}
 	qrReader := qrcode.NewQRCodeReader()
-	result, _ := qrReader.Decode(bmp, nil)
+	result, err := qrReader.Decode(bmp, nil)
+	if err != nil {
+		logs.Err(err.Error())
+		return ""
+	}
 	return result.String()
 }
