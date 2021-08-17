@@ -1,5 +1,10 @@
 package keylog
 
+import (
+	logs "github.com/danbai225/go-logs"
+	"runtime"
+)
+
 var keyMap = map[uint16]string{
 	14:    "BackSpace",
 	15:    "Tab",
@@ -104,24 +109,41 @@ var keyMap = map[uint16]string{
 	43:    "\\|",
 	27:    "]}",
 	40:    "\u0027\"",
-
-	61003: "Left Arrow",
-	61000: "Up Arrow",
-	61005: "Right Arrow",
-	61008: "Dw Arrow",
-	61001: "Page Up",
-	61009: "Page Down",
-	61007: "End",
-	60999: "Home",
-	61010: "Insert",
-	61011: "Delete",
-	3639:  "PrtSc",
-	70:    "ScrLk",
-	3653:  "Pause",
-	3677:  "Menu",
-	3613:  "Right Control",
 }
 
+func init() {
+	var winMap = map[uint16]string{
+		61003: "Left Arrow",
+		61000: "Up Arrow",
+		61005: "Right Arrow",
+		61008: "Dw Arrow",
+		61001: "Page Up",
+		61009: "Page Down",
+		61007: "End",
+		60999: "Home",
+		61010: "Insert",
+		61011: "Delete",
+		3639:  "PrtSc",
+		70:    "ScrLk",
+		3653:  "Pause",
+		3677:  "Menu",
+		3613:  "Right Control",
+	}
+	winKey2 := make(map[string]uint16)
+
+	if runtime.GOOS == "windows" {
+		for k, v := range winMap {
+			winKey2[v] = k
+		}
+		logs.Info(len(winKey2))
+		for k1, v1 := range keyMap {
+			if _, has := winKey2[v1]; !has {
+				winMap[k1] = v1
+			}
+		}
+		keyMap = winMap
+	}
+}
 func getKeyName(code uint16) string {
 	if name, has := keyMap[code]; has {
 		return name
