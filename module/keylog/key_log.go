@@ -2,10 +2,12 @@ package keylog
 
 import (
 	"down_tip/core"
+	logs "github.com/danbai225/go-logs"
 	"github.com/getlantern/systray"
 	"github.com/gogf/gf/frame/g"
 	"github.com/gogf/gf/net/ghttp"
 	hook "github.com/robotn/gohook"
+
 	"github.com/skratchdot/open-golang/open"
 )
 
@@ -55,8 +57,9 @@ func monitorInput() {
 	defer hook.StopEvent()
 	for ev := range EvChan {
 		if ev.Kind == hook.KeyHold {
-			if _, has := keyLogMap[ev.Rawcode]; has {
-				keyLogMap[ev.Rawcode].Val++
+			logs.Info(getKeyName(ev.Keycode), ev.Keycode)
+			if _, has := keyLogMap[ev.Keycode]; has {
+				keyLogMap[ev.Keycode].Val++
 			}
 		}
 	}
