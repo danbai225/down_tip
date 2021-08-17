@@ -4,6 +4,7 @@ import (
 	_ "embed"
 	logs "github.com/danbai225/go-logs"
 	"github.com/getlantern/systray"
+	"github.com/ncruces/zenity"
 	"sync"
 	"time"
 )
@@ -164,6 +165,9 @@ func (m *Module) Tip(str string, time time.Duration) {
 			time:    time,
 		}
 	}()
+}
+func (m *Module) Notify(str string) {
+	zenity.Notify(str)
 }
 
 //</editor-fold>
