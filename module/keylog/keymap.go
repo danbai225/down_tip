@@ -3,13 +3,13 @@ package keylog
 var keyMap = map[uint16]string{
 	14:    "BackSpace",
 	15:    "Tab",
-	29:    "Win",
+	29:    "Left Control",
 	0:     "Menu",
 	28:    "Enter",
 	42:    "Left Shift",
 	54:    "Right Shift",
 	3676:  "Left Control",
-	3675:  "Right Control",
+	3675:  "Win",
 	56:    "Left Alt",
 	3640:  "Right Alt",
 	58:    "Cape Lock",
@@ -118,6 +118,8 @@ var keyMap = map[uint16]string{
 	3639:  "PrtSc",
 	70:    "ScrLk",
 	3653:  "Pause",
+	3677:  "Menu",
+	3613:  "Right Control",
 }
 
 func getKeyName(code uint16) string {
