@@ -22,8 +22,14 @@ type App struct {
 	titleLock sync.Mutex
 }
 
-func NewApp() *App {
-	return &App{config: config{configName: "config.json"}, title: make([]*title, 0), module: make([]*Module, 0), tip: make(chan tip, 10)}
+func NewApp() (*App, error) {
+	app := App{config: config{configName: "config.json"}, title: make([]*title, 0), module: make([]*Module, 0), tip: make(chan tip, 10)}
+	//加载配置
+	err := app.config.load()
+	if err != nil {
+		return nil, err
+	}
+	return &app, nil
 }
 func (a *App) addTitle(module *Module, titleText string) {
 	for i := range a.title {
@@ -52,15 +58,10 @@ func (a *App) removeTitle(module *Module) {
 	}
 }
 func (a *App) Run() error {
-	//加载配置
-	err := a.config.load()
-	if err != nil {
-		return err
-	}
 	//获取模块配置
 	for _, m := range a.module {
 		if c, has := a.config.Module[m.name]; has {
-			m.Config = c
+			m.Config = c.Config
 		}
 	}
 
@@ -95,7 +96,7 @@ func (a *App) onReady() {
 	systray.SetTemplateIcon(iconBs, iconBs)
 
 	for _, module := range a.module {
-		item := systray.AddMenuItem(module.name, module.tooltip)
+		item := systray.AddMenuItem(module.itemName, module.tooltip)
 		go module.onReady(item)
 	}
 	systray.SetTooltip("关于这个程序。。。")
@@ -116,6 +117,9 @@ func (a *App) exit() {
 func (a *App) RegisterModule(module ...*Module) {
 	for i := range module {
 		m := module[i]
+		if mc, has := a.config.Module[m.name]; !has || !mc.Enable {
+			continue
+		}
 		m.app = a
 		a.module = append(a.module, m)
 	}
@@ -123,8 +127,8 @@ func (a *App) RegisterModule(module ...*Module) {
 
 //</editor-fold>
 
-func NewModule(name, tooltip string, onReady func(item *systray.MenuItem), exit func()) *Module {
-	module := Module{name: name, tooltip: tooltip}
+func NewModule(name, itemName, tooltip string, onReady func(item *systray.MenuItem), exit func()) *Module {
+	module := Module{name: name, itemName: itemName, tooltip: tooltip}
 	module.onReady = onReady
 	module.exit = exit
 	return &module
@@ -143,12 +147,13 @@ type title struct {
 //<editor-fold desc="模块结构体">
 
 type Module struct {
-	onReady func(item *systray.MenuItem)
-	exit    func()
-	app     *App
-	name    string
-	tooltip string
-	Config  interface{}
+	onReady  func(item *systray.MenuItem)
+	exit     func()
+	app      *App
+	name     string
+	itemName string
+	tooltip  string
+	Config   interface{}
 }
 
 func (m *Module) SetTitle(title string) {

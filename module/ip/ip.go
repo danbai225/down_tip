@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"github.com/axgle/mahonia"
 	"github.com/getlantern/systray"
-	"github.com/go-vgo/robotgo"
+	"golang.design/x/clipboard"
 	"io/ioutil"
 	"net/http"
 )
@@ -13,7 +13,7 @@ import (
 var keyLog *core.Module
 
 func ExportModule() *core.Module {
-	keyLog = core.NewModule("ip:"+getIpInfo("").IP, "ip", onReady, exit)
+	keyLog = core.NewModule("ip", "ip:"+getIpInfo("").IP, "ip", onReady, exit)
 	return keyLog
 }
 func onReady(item *systray.MenuItem) {
@@ -21,7 +21,7 @@ func onReady(item *systray.MenuItem) {
 		select {
 		case <-item.ClickedCh:
 			info := getIpInfo("")
-			robotgo.WriteAll(info.IP)
+			clipboard.Write(clipboard.FmtText, []byte(info.IP))
 		}
 	}
 }

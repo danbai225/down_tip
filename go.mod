@@ -4,9 +4,10 @@ go 1.16
 
 require (
 	github.com/axgle/mahonia v0.0.0-20180208002826-3358181d7394
-	github.com/danbai225/go-logs v0.0.0-20210814153534-bc1e9d63d3ca
+	github.com/chromedp/cdproto v0.0.0-20210808225517-c36c1bd4c35e
+	github.com/chromedp/chromedp v0.7.4
+	github.com/danbai225/go-logs v0.0.1
 	github.com/getlantern/systray v1.1.0
-	github.com/go-vgo/robotgo v0.99.0
 	github.com/gogf/gf v1.16.5
 	github.com/makiuchi-d/gozxing v0.0.2
 	github.com/ncruces/zenity v0.7.11

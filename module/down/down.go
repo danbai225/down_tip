@@ -10,7 +10,7 @@ import (
 var down *core.Module
 
 func ExportModule() *core.Module {
-	down = core.NewModule("down", "down", onReady, exit)
+	down = core.NewModule("down", "down", "计算时间", onReady, exit)
 	return down
 }
 func onReady(item *systray.MenuItem) {

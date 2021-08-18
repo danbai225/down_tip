@@ -1,9 +1,21 @@
 {
-  "module":{
+  "module": {
     "down": {
-      "start_time": "09:00",
-      "end_time": "18:00",
-      "elasticity": false
+      "enable": true,
+      "config": {
+        "start_time": "09:00",
+        "end_time": "18:00",
+        "elasticity": false
+      }
+    },
+    "code2img": {
+      "enable": true
+    },
+    "key_log": {
+      "enable": true
+    },
+    "qrCode": {
+      "enable": true
     }
   }
 }

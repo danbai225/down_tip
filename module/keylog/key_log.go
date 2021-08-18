@@ -14,16 +14,22 @@ import (
 var keyLog *core.Module
 
 func ExportModule() *core.Module {
-	keyLog = core.NewModule("keyLog", "记录按键次数", onReady, exit)
+	keyLog = core.NewModule("key_log", "按键日志", "记录按键次数", onReady, exit)
 	return keyLog
 }
 func onReady(item *systray.MenuItem) {
 	go monitorInput()
 	go func() {
+		defer func() {
+			err := recover()
+			if err != nil {
+				logs.Err(err)
+			}
+		}()
 		s := g.Server()
 		s.SetPort(7989)
 		routing(s)
-		go s.Run()
+		s.Run()
 	}()
 	for {
 		select {
@@ -57,7 +63,7 @@ func monitorInput() {
 	defer hook.StopEvent()
 	for ev := range EvChan {
 		if ev.Kind == hook.KeyHold {
-			logs.Info(getKeyName(ev.Keycode), ev.Keycode)
+			//logs.Info(getKeyName(ev.Keycode), ev.Keycode)
 			if _, has := keyLogMap[ev.Keycode]; has {
 				keyLogMap[ev.Keycode].Val++
 			}

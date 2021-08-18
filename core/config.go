@@ -14,27 +14,39 @@ import (
 var appPath = ""
 
 type config struct {
-	Module     map[string]interface{} `json:"module"`
+	Module     map[string]ModuleConfig `json:"module"`
 	configName string
 }
 
 func (c *config) getConfig(module *Module) interface{} {
-	return c.Module[module.name]
+	if moduleConf, has := c.Module[module.name]; has {
+		return moduleConf.Config
+	}
+	return nil
 }
 func (c *config) saveConfig(module *Module, conf interface{}) {
-	c.Module[module.name] = conf
+	if moduleConf, has := c.Module[module.name]; has {
+		moduleConf.Config = conf
+		c.Module[module.name] = moduleConf
+	}
 }
 func (c *config) load() error {
 	if c.configName == "" {
 		return errors.New("配置文件名为空")
 	}
-	c.Module = make(map[string]interface{})
+	c.Module = make(map[string]ModuleConfig)
 	file, err := ioutil.ReadFile(getConfigPath(c.configName))
 	if err != nil {
 		return err
 	}
 	return json.Unmarshal(file, c)
 }
+
+type ModuleConfig struct {
+	Enable bool        `json:"enable"`
+	Config interface{} `json:"config"`
+}
+
 func ExecPathDir() string {
 	if appPath == "" {
 		file, err := exec.LookPath(os.Args[0])

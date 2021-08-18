@@ -2,6 +2,7 @@ package main
 
 import (
 	"down_tip/core"
+	"down_tip/module/code2img"
 	"down_tip/module/down"
 	"down_tip/module/ip"
 	"down_tip/module/keylog"
@@ -10,10 +11,14 @@ import (
 )
 
 func main() {
-	a := core.NewApp()
+	a, err := core.NewApp()
+	if err != nil {
+		logs.Err(err)
+		return
+	}
 	//注册模块
-	a.RegisterModule(down.ExportModule(), keylog.ExportModule(), ip.ExportModule(), qrcode.ExportModule())
-	err := a.Run()
+	a.RegisterModule(down.ExportModule(), keylog.ExportModule(), ip.ExportModule(), qrcode.ExportModule(), code2img.ExportModule())
+	err = a.Run()
 	if err != nil {
 		logs.Err(err)
 		return
