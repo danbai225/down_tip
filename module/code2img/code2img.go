@@ -27,6 +27,7 @@ import (
 	"context"
 	"down_tip/core"
 	"github.com/chromedp/cdproto/runtime"
+	logs "github.com/danbai225/go-logs"
 	"github.com/getlantern/systray"
 	"golang.design/x/clipboard"
 
@@ -106,7 +107,7 @@ func code2Img(code string, Options ...map[string]string) ([]byte, error) {
 	urlstr := "https://carbon.now.sh/?" + values.Encode() + "&" + codeparam.Encode()
 	// capture screenshot of an element
 	var buf []byte
-	if err := chromedp.Run(ctx, elementScreenshot(urlstr, "#export-container  .container-bg", &buf)); err != nil {
+	if err := chromedp.Run(ctx, elementScreenshot(urlstr, "#export-container .container-bg", &buf)); err != nil {
 		return buf, err
 	}
 	return buf, nil
@@ -122,14 +123,14 @@ func elementScreenshot(urlstr, sel string, res *[]byte) chromedp.Tasks {
 }
 func screenshot(sel interface{}, picbuf *[]byte, opts ...chromedp.QueryOption) chromedp.QueryAction {
 	if picbuf == nil {
-		panic("picbuf cannot be nil")
+		return nil
 	}
 
 	return chromedp.QueryAfter(sel, func(ctx context.Context, time runtime.ExecutionContextID, nodes ...*cdp.Node) error {
 		if len(nodes) < 1 {
 			return fmt.Errorf("selector %q did not return any nodes", sel)
 		}
-
+		logs.Info("t3")
 		// get layout metrics
 		_, _, contentSize, _, _, _, err := page.GetLayoutMetrics().Do(ctx)
 		if err != nil {

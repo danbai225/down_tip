@@ -1,7 +1,6 @@
 package keylog
 
 import (
-	logs "github.com/danbai225/go-logs"
 	"runtime"
 )
 
@@ -135,7 +134,6 @@ func init() {
 		for k, v := range winMap {
 			winKey2[v] = k
 		}
-		logs.Info(len(winKey2))
 		for k1, v1 := range keyMap {
 			if _, has := winKey2[v1]; !has {
 				winMap[k1] = v1
