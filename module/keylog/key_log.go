@@ -2,7 +2,6 @@ package keylog
 
 import (
 	"down_tip/core"
-	logs "github.com/danbai225/go-logs"
 	"github.com/getlantern/systray"
 	"github.com/gogf/gf/frame/g"
 	"github.com/gogf/gf/net/ghttp"
@@ -14,27 +13,24 @@ import (
 var keyLog *core.Module
 
 func ExportModule() *core.Module {
-	keyLog = core.NewModule("key_log", "按键日志", "记录按键次数", onReady, exit)
+	keyLog = core.NewModule("key_log", "按键日志", "记录按键次数", onReady, exit, router)
 	return keyLog
+}
+func router(group *ghttp.RouterGroup) {
+	group.GET("/", func(r *ghttp.Request) {
+		r.Response.WriteJson(g.Map{
+			"msg":  "获取成功",
+			"code": 0,
+			"data": getKeyLog(),
+		})
+	})
 }
 func onReady(item *systray.MenuItem) {
 	go monitorInput()
-	go func() {
-		defer func() {
-			err := recover()
-			if err != nil {
-				logs.Err(err)
-			}
-		}()
-		s := g.Server()
-		s.SetPort(7989)
-		routing(s)
-		s.Run()
-	}()
 	for {
 		select {
 		case <-item.ClickedCh:
-			open.Run("http://127.0.0.1:7989/api/key_log")
+			open.Run("http://127.0.0.1:7989/key_log")
 		}
 	}
 }
@@ -76,21 +72,4 @@ func getKeyLog() []*Key {
 		keys = append(keys, key)
 	}
 	return keys
-}
-
-func middlewareCORS(r *ghttp.Request) {
-	r.Response.CORSDefault()
-	r.Middleware.Next()
-}
-
-func routing(s *ghttp.Server) {
-	api := s.Group("/api")
-	api.Middleware(middlewareCORS)
-	api.GET("/key_log", func(r *ghttp.Request) {
-		r.Response.WriteJson(g.Map{
-			"msg":  "获取成功",
-			"code": 0,
-			"data": getKeyLog(),
-		})
-	})
 }

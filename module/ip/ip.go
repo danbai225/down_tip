@@ -13,7 +13,7 @@ import (
 var keyLog *core.Module
 
 func ExportModule() *core.Module {
-	keyLog = core.NewModule("ip", "ip:"+getIpInfo("").IP, "ip", onReady, exit)
+	keyLog = core.NewModule("ip", "ip:"+getIpInfo("").IP, "ip", onReady, exit, nil)
 	return keyLog
 }
 func onReady(item *systray.MenuItem) {

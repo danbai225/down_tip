@@ -43,7 +43,7 @@ import (
 var code2img *core.Module
 
 func ExportModule() *core.Module {
-	code2img = core.NewModule("code2img", "代码转图片", "把剪贴板中的代码转成图片", onReady, exit)
+	code2img = core.NewModule("code2img", "代码转图片", "把剪贴板中的代码转成图片", onReady, exit, nil)
 	return code2img
 }
 

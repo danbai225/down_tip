@@ -4,6 +4,8 @@ import (
 	_ "embed"
 	logs "github.com/danbai225/go-logs"
 	"github.com/getlantern/systray"
+	"github.com/gogf/gf/frame/g"
+	"github.com/gogf/gf/net/ghttp"
 	"github.com/ncruces/zenity"
 	"sync"
 	"time"
@@ -20,15 +22,31 @@ type App struct {
 	config    config
 	tip       chan tip
 	titleLock sync.Mutex
+	g         *ghttp.Server
+	index     func(r *ghttp.Request)
 }
 
-func NewApp() (*App, error) {
-	app := App{config: config{configName: "config.json"}, title: make([]*title, 0), module: make([]*Module, 0), tip: make(chan tip, 10)}
+func NewApp(configPath ...string) (*App, error) {
+	path := "config.json"
+	if len(configPath) > 0 {
+		path = configPath[0]
+	}
+	app := App{config: config{configName: path},
+		title: make([]*title, 0), module: make([]*Module, 0), tip: make(chan tip, 10),
+		index: func(r *ghttp.Request) {
+			r.Response.Write("hello downTip")
+		},
+	}
 	//加载配置
 	err := app.config.load()
 	if err != nil {
 		return nil, err
 	}
+	app.g = g.Server()
+	if app.config.HTTPPort == 0 {
+		app.config.HTTPPort = 7989
+	}
+	app.g.SetPort(int(app.config.HTTPPort))
 	return &app, nil
 }
 func (a *App) addTitle(module *Module, titleText string) {
@@ -62,9 +80,12 @@ func (a *App) Run() error {
 	for _, m := range a.module {
 		if c, has := a.config.Module[m.name]; has {
 			m.Config = c.Config
+			if m.route != nil {
+				group := a.g.Group("/" + m.name)
+				go m.route(group)
+			}
 		}
 	}
-
 	//运行主体
 	systray.Run(a.onReady, a.exit)
 	return nil
@@ -90,14 +111,23 @@ func (a *App) doTitle() {
 		time.Sleep(time.Second)
 	}
 }
+func middlewareCORS(r *ghttp.Request) {
+	r.Response.CORSDefault()
+	r.Middleware.Next()
+}
 func (a *App) onReady() {
 	logs.Info("程序启动")
 	//设置程序基本图标等等。。
 	systray.SetTemplateIcon(iconBs, iconBs)
-
+	//运行http
+	a.g.BindHandler("/", a.index)
+	// 跨域
+	a.g.Use(middlewareCORS)
 	for _, module := range a.module {
 		item := systray.AddMenuItem(module.itemName, module.tooltip)
-		go module.onReady(item)
+		if module.onReady != nil {
+			go module.onReady(item)
+		}
 	}
 	systray.SetTooltip("关于这个程序。。。")
 	quit := systray.AddMenuItem("Quit", "退出这个程序")
@@ -107,10 +137,14 @@ func (a *App) onReady() {
 	}()
 	go a.doTip()
 	go a.doTitle()
+	go a.g.Run()
+
 }
 func (a *App) exit() {
 	for _, module := range a.module {
-		go module.exit()
+		if module.exit != nil {
+			go module.exit()
+		}
 	}
 	logs.Info("程序退出")
 }
@@ -127,10 +161,11 @@ func (a *App) RegisterModule(module ...*Module) {
 
 //</editor-fold>
 
-func NewModule(name, itemName, tooltip string, onReady func(item *systray.MenuItem), exit func()) *Module {
+func NewModule(name, itemName, tooltip string, onReady func(item *systray.MenuItem), exit func(), route func(*ghttp.RouterGroup)) *Module {
 	module := Module{name: name, itemName: itemName, tooltip: tooltip}
 	module.onReady = onReady
 	module.exit = exit
+	module.route = route
 	return &module
 }
 
@@ -154,6 +189,11 @@ type Module struct {
 	itemName string
 	tooltip  string
 	Config   interface{}
+	route    func(*ghttp.RouterGroup)
+}
+
+func (m *Module) UnmarshalConfig(dst interface{}) error {
+	return Unmarshal(m.Config, dst)
 }
 
 func (m *Module) SetTitle(title string) {
@@ -173,6 +213,11 @@ func (m *Module) Tip(str string, time time.Duration) {
 }
 func (m *Module) Notify(str string) {
 	zenity.Notify(str)
+}
+func (m *Module) SaveConfig(c interface{}) {
+	m.Config = c
+	m.app.config.saveConfig(m, m.Config)
+	m.app.config.save()
 }
 
 //</editor-fold>

@@ -17,7 +17,7 @@ import (
 var qrCode *core.Module
 
 func ExportModule() *core.Module {
-	qrCode = core.NewModule("qrCode", "qrCode->点击识别", "识别剪贴板二维码", onReady, exit)
+	qrCode = core.NewModule("qrCode", "qrCode->点击识别", "识别剪贴板二维码", onReady, exit, nil)
 	return qrCode
 }
 func onReady(item *systray.MenuItem) {
