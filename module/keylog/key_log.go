@@ -30,7 +30,7 @@ func onReady(item *systray.MenuItem) {
 	for {
 		select {
 		case <-item.ClickedCh:
-			open.Run("http://127.0.0.1:7989/key_log")
+			open.Run(keyLog.GetRootUrl())
 		}
 	}
 }

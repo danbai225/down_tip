@@ -1,1 +1,31 @@
-{"module":{"code2img":{"enable":true,"config":null},"down":{"enable":true,"config":{"elasticity":false,"end_time":"18:00","start_time":"09:00"}},"key_log":{"enable":true,"config":null},"qrCode":{"enable":true,"config":null},"weather":{"enable":true,"config":{"Name":"test"}}}}
+{
+  "module": {
+    "code2img": {
+      "enable": true,
+      "config": null
+    },
+    "down": {
+      "enable": true,
+      "config": {
+        "elasticity": false,
+        "end_time": "18:00",
+        "start_time": "09:00"
+      }
+    },
+    "key_log": {
+      "enable": true,
+      "config": null
+    },
+    "qrCode": {
+      "enable": true,
+      "config": null
+    },
+    "weather": {
+      "enable": true,
+      "config": {
+        "LatitudeAndLongitude": "104.080341124,30.485522248"
+      }
+    }
+  },
+  "http_port": 7989
+}

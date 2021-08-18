@@ -2,6 +2,7 @@ package core
 
 import (
 	_ "embed"
+	"fmt"
 	logs "github.com/danbai225/go-logs"
 	"github.com/getlantern/systray"
 	"github.com/gogf/gf/frame/g"
@@ -80,9 +81,10 @@ func (a *App) Run() error {
 	for _, m := range a.module {
 		if c, has := a.config.Module[m.name]; has {
 			m.Config = c.Config
+			m.Port = a.config.HTTPPort
 			if m.route != nil {
 				group := a.g.Group("/" + m.name)
-				go m.route(group)
+				m.route(group)
 			}
 		}
 	}
@@ -190,6 +192,7 @@ type Module struct {
 	tooltip  string
 	Config   interface{}
 	route    func(*ghttp.RouterGroup)
+	Port     uint16
 }
 
 func (m *Module) UnmarshalConfig(dst interface{}) error {
@@ -218,6 +221,9 @@ func (m *Module) SaveConfig(c interface{}) {
 	m.Config = c
 	m.app.config.saveConfig(m, m.Config)
 	m.app.config.save()
+}
+func (m *Module) GetRootUrl() string {
+	return fmt.Sprintf("http://localhost:%d/%s", m.Port, m.name)
 }
 
 //</editor-fold>
