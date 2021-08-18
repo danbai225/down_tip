@@ -55,7 +55,10 @@ func onReady(item *systray.MenuItem) {
 			if code != "" {
 				img, err := code2Img(code)
 				if err == nil {
+					code2img.Notify("转换成功")
 					clipboard.Write(clipboard.FmtImage, img)
+				} else {
+					code2img.Notify("转换失败")
 				}
 			}
 		}
