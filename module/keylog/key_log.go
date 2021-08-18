@@ -70,8 +70,12 @@ func monitorInput() {
 		}
 	}
 }
-func getKeyLog() map[uint16]*Key {
-	return keyLogMap
+func getKeyLog() []*Key {
+	keys := make([]*Key, 0)
+	for _, key := range keyLogMap {
+		keys = append(keys, key)
+	}
+	return keys
 }
 
 func middlewareCORS(r *ghttp.Request) {
