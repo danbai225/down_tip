@@ -2,12 +2,14 @@ package code2img
 
 import (
 	"down_tip/core"
+	logs "github.com/danbai225/go-logs"
 	"github.com/getlantern/systray"
 	"github.com/go-rod/rod"
 	"github.com/go-rod/rod/lib/launcher"
 	"github.com/go-rod/rod/lib/proto"
 	"golang.design/x/clipboard"
 	"net/url"
+	"strings"
 	"time"
 )
 
@@ -76,13 +78,12 @@ func code2Img(code string, Options ...map[string]string) ([]byte, error) {
 	var browser *rod.Browser
 
 	if path, exists := launcher.LookPath(); exists {
-		u := launcher.New().Bin(path).Headless(true).MustLaunch()
+		u := launcher.New().Bin(path).Set("--disable-gpu").Headless(false).MustLaunch()
 		browser = rod.New().ControlURL(u).MustConnect()
 	} else {
 		browser = rod.New().MustConnect()
 	}
-	defer browser.Close()
-
+	//defer browser.Close()
 	urlstr := "https://carbon.supermario.vip/?" + values.Encode() + "&code=t"
 	page := browser.MustPage()
 	err := rod.Try(func() {
@@ -102,11 +103,51 @@ func code2Img(code string, Options ...map[string]string) ([]byte, error) {
 	mouse.MustUp("left")
 	keyboard.MustDown('\b')
 	keyboard.MustUp('\b')
-	keyboard.InsertText(code)
-	//截取DOM
-	bytes, err := page.MustElement("#export-container").Screenshot(proto.PageCaptureScreenshotFormatPng, 100)
-	if err != nil {
-		return nil, err
+	split := strings.Split(code, "\n")
+	for _, s := range split {
+		keyboard.InsertText(s + "\n")
 	}
-	return bytes, nil
+	element := page.MustElement("#export-container")
+	box := element.MustShape().Box()
+	logs.Info(box.Width, box.Height)
+
+	element.MustEval(`
+getxy =function(){
+var element=document.getElementById('export-container')
+//计算x坐标
+  var actualLeft = element.offsetLeft;
+  var current = element.offsetParent;
+  while (current !== null){
+    actualLeft += current.offsetLeft;
+    current = current.offsetParent;
+  }
+  //计算y坐标
+  var actualTop = element.offsetTop;
+  var current = element.offsetParent;
+  while (current !== null){
+    actualTop += (current.offsetTop+current.clientTop);
+    current = current.offsetParent;
+  }
+  //返回结果
+  return {x: actualLeft, y: actualTop}
+}
+`)
+	vals := page.MustEval("getxy()")
+	img, _ := page.Screenshot(true, &proto.PageCaptureScreenshot{
+		Format:  proto.PageCaptureScreenshotFormatJpeg,
+		Quality: 90,
+		Clip: &proto.PageViewport{
+			X:      vals.Get("x").Num(),
+			Y:      vals.Get("y").Num(),
+			Width:  box.Width,
+			Height: box.Height,
+			Scale:  1,
+		},
+		FromSurface: true,
+	})
+	//bytes, err := page.MustElement("#export-container").Screenshot(proto.PageCaptureScreenshotFormatPng, 100)
+	//if err != nil {
+	//	return nil, err
+	//}
+	return img, nil
 }

@@ -82,6 +82,7 @@ func weatherUpdate(item *systray.MenuItem) {
 	resp, err := http.Get(url)
 	if err != nil {
 		weather.Notify("获取失败:" + err.Error())
+		return
 	}
 	readAll, _ := ioutil.ReadAll(resp.Body)
 	res := Weather{}
