@@ -2,6 +2,7 @@ package keylog
 
 import (
 	"down_tip/core"
+	_ "embed"
 	"github.com/getlantern/systray"
 	"github.com/gogf/gf/frame/g"
 	"github.com/gogf/gf/net/ghttp"
@@ -16,8 +17,16 @@ func ExportModule() *core.Module {
 	keyLog = core.NewModule("key_log", "按键日志", "记录按键次数", onReady, exit, router)
 	return keyLog
 }
+
+//go:embed index.html
+var indexHtml []byte
+
 func router(group *ghttp.RouterGroup) {
 	group.GET("/", func(r *ghttp.Request) {
+
+		r.Response.Write(indexHtml)
+	})
+	group.GET("/api", func(r *ghttp.Request) {
 		r.Response.WriteJson(g.Map{
 			"msg":  "获取成功",
 			"code": 0,
@@ -59,7 +68,7 @@ func monitorInput() {
 	defer hook.StopEvent()
 	for ev := range EvChan {
 		if ev.Kind == hook.KeyHold {
-			//logs.Info(getKeyName(ev.Keycode), ev.Keycode)
+			//logs.Info(getKeyName(ev.Keycode),ev.Keycode)
 			if _, has := keyLogMap[ev.Keycode]; has {
 				keyLogMap[ev.Keycode].Val++
 			}

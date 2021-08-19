@@ -12,7 +12,7 @@ var keyMap = map[uint16]string{
 	28:    "Enter",
 	42:    "Left Shift",
 	54:    "Right Shift",
-	3676:  "Left Control",
+	3613:  "Right Control",
 	3675:  "Win",
 	56:    "Left Alt",
 	3640:  "Right Alt",
