@@ -31,6 +31,8 @@ func onReady(item *systray.MenuItem) {
 				} else {
 					code2img.Notify("转换失败")
 				}
+			} else {
+				code2img.Notify("没有找到剪贴板中的代码")
 			}
 		}
 	}
@@ -40,7 +42,6 @@ func exit() {
 }
 
 //https://github.com/carbon-app/carbon/blob/b2e251f429d000ad6c9ee85bb9e052d5cf8db746/lib/constants.js#L624
-
 func code2Img(code string, Options ...map[string]string) ([]byte, error) {
 	var carbonOptions = map[string]string{
 		"bg":     "rgba(74,144,226,1)", // 背景颜色
@@ -72,16 +73,17 @@ func code2Img(code string, Options ...map[string]string) ([]byte, error) {
 	for k, v := range carbonOptions {
 		values.Set(k, v)
 	}
-	codeparam := url.Values{}
-	codeparam.Set("code", url.PathEscape(code))
 	var browser *rod.Browser
+
 	if path, exists := launcher.LookPath(); exists {
-		u := launcher.New().Bin(path).MustLaunch()
+		u := launcher.New().Bin(path).Headless(true).MustLaunch()
 		browser = rod.New().ControlURL(u).MustConnect()
 	} else {
 		browser = rod.New().MustConnect()
 	}
-	urlstr := "https://carbon.supermario.vip/?" + values.Encode() + "&" + codeparam.Encode()
+	defer browser.Close()
+
+	urlstr := "https://carbon.supermario.vip/?" + values.Encode() + "&code=t"
 	page := browser.MustPage()
 	err := rod.Try(func() {
 		page.Timeout(10 * time.Second).MustNavigate(urlstr)
@@ -89,6 +91,19 @@ func code2Img(code string, Options ...map[string]string) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
+	//defer page.Close()
+	pt := page.MustElement(".CodeMirror-lines").MustShape().OnePointInside()
+	//模拟鼠标键盘
+	mouse := page.Mouse
+	keyboard := page.Keyboard
+	//移动输入代码
+	mouse.MustMove(pt.X, pt.Y-10)
+	mouse.MustDown("left")
+	mouse.MustUp("left")
+	keyboard.MustDown('\b')
+	keyboard.MustUp('\b')
+	keyboard.InsertText(code)
+	//截取DOM
 	bytes, err := page.MustElement("#export-container").Screenshot(proto.PageCaptureScreenshotFormatPng, 100)
 	if err != nil {
 		return nil, err
