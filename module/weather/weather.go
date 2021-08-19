@@ -56,7 +56,7 @@ func onReady(item *systray.MenuItem) {
 			if config.LatitudeAndLongitude != "" {
 				go weatherUpdate(item)
 			}
-			time.Sleep(time.Hour * 15)
+			time.Sleep(time.Minute * 5)
 		}
 	}()
 	for {
