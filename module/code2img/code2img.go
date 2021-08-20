@@ -2,7 +2,6 @@ package code2img
 
 import (
 	"down_tip/core"
-	logs "github.com/danbai225/go-logs"
 	"github.com/getlantern/systray"
 	"github.com/go-rod/rod"
 	"github.com/go-rod/rod/lib/launcher"
@@ -78,12 +77,12 @@ func code2Img(code string, Options ...map[string]string) ([]byte, error) {
 	var browser *rod.Browser
 
 	if path, exists := launcher.LookPath(); exists {
-		u := launcher.New().Bin(path).Set("--disable-gpu").Headless(false).MustLaunch()
+		u := launcher.New().Bin(path).Set("--disable-gpu").Headless(true).MustLaunch()
 		browser = rod.New().ControlURL(u).MustConnect()
 	} else {
 		browser = rod.New().MustConnect()
 	}
-	//defer browser.Close()
+	defer browser.Close()
 	urlstr := "https://carbon.supermario.vip/?" + values.Encode() + "&code=t"
 	page := browser.MustPage()
 	err := rod.Try(func() {
@@ -104,12 +103,16 @@ func code2Img(code string, Options ...map[string]string) ([]byte, error) {
 	keyboard.MustDown('\b')
 	keyboard.MustUp('\b')
 	split := strings.Split(code, "\n")
-	for _, s := range split {
-		keyboard.InsertText(s + "\n")
+	for i, s := range split {
+		if i == len(split)-1 {
+			keyboard.InsertText(s)
+		} else {
+			keyboard.InsertText(s + "\n")
+		}
 	}
 	element := page.MustElement("#export-container")
 	box := element.MustShape().Box()
-	logs.Info(box.Width, box.Height)
+	//logs.Info(box.Width, box.Height)
 
 	element.MustEval(`
 getxy =function(){
@@ -141,13 +144,9 @@ var element=document.getElementById('export-container')
 			Y:      vals.Get("y").Num(),
 			Width:  box.Width,
 			Height: box.Height,
-			Scale:  1,
+			Scale:  2,
 		},
 		FromSurface: true,
 	})
-	//bytes, err := page.MustElement("#export-container").Screenshot(proto.PageCaptureScreenshotFormatPng, 100)
-	//if err != nil {
-	//	return nil, err
-	//}
 	return img, nil
 }
