@@ -16,7 +16,6 @@ import (
 var iconBs []byte
 
 //<editor-fold desc="APP主体结构体">
-
 type App struct {
 	title     []*title
 	module    []*Module
