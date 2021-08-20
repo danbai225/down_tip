@@ -25,6 +25,8 @@
       "config": {
         "LatitudeAndLongitude": "104.080341124,30.485522248"
       }
+    },"ip": {
+      "enable": true
     }
   },
   "http_port": 7989

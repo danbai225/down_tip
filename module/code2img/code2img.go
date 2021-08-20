@@ -1,44 +1,16 @@
 package code2img
 
-/*
-The MIT License (MIT)
-
-Copyright (c) 2020 skanehira,danbai225
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-*/
 import (
-	"context"
 	"down_tip/core"
-	"github.com/chromedp/cdproto/runtime"
 	logs "github.com/danbai225/go-logs"
 	"github.com/getlantern/systray"
+	"github.com/go-rod/rod"
+	"github.com/go-rod/rod/lib/launcher"
+	"github.com/go-rod/rod/lib/proto"
 	"golang.design/x/clipboard"
-
-	"fmt"
-	"github.com/chromedp/cdproto/cdp"
-	"github.com/chromedp/cdproto/dom"
-	"github.com/chromedp/cdproto/emulation"
-	"github.com/chromedp/cdproto/page"
-	"github.com/chromedp/chromedp"
-	"math"
 	"net/url"
+	"strings"
+	"time"
 )
 
 var code2img *core.Module
@@ -61,6 +33,8 @@ func onReady(item *systray.MenuItem) {
 				} else {
 					code2img.Notify("转换失败")
 				}
+			} else {
+				code2img.Notify("没有找到剪贴板中的代码")
 			}
 		}
 	}
@@ -70,13 +44,7 @@ func exit() {
 }
 
 //https://github.com/carbon-app/carbon/blob/b2e251f429d000ad6c9ee85bb9e052d5cf8db746/lib/constants.js#L624
-
 func code2Img(code string, Options ...map[string]string) ([]byte, error) {
-	// create context
-	ctx, cancel := chromedp.NewContext(
-		context.Background(),
-	)
-	defer cancel()
 	var carbonOptions = map[string]string{
 		"bg":     "rgba(74,144,226,1)", // 背景颜色
 		"t":      "VSCode",             // 主题
@@ -95,85 +63,91 @@ func code2Img(code string, Options ...map[string]string) ([]byte, error) {
 		"fs":     "13.5px",             // 字体大小
 		"lh":     "152%",               // 行高
 		"si":     "false",              //平方图像
-		"es":     "2x",                 // 出口尺寸
+		"es":     "1x",                 // 出口尺寸
 		"wm":     "false",              // 水印
+	}
+	if len(Options) > 0 {
+		for k, v := range Options[0] {
+			carbonOptions[k] = v
+		}
 	}
 	values := url.Values{}
 	for k, v := range carbonOptions {
 		values.Set(k, v)
 	}
-	codeparam := url.Values{}
-	codeparam.Set("code", url.PathEscape(code))
-	urlstr := "https://carbon.now.sh/?" + values.Encode() + "&" + codeparam.Encode()
-	// capture screenshot of an element
-	var buf []byte
-	if err := chromedp.Run(ctx, elementScreenshot(urlstr, "#export-container .container-bg", &buf)); err != nil {
-		return buf, err
+	var browser *rod.Browser
+
+	if path, exists := launcher.LookPath(); exists {
+		u := launcher.New().Bin(path).Set("--disable-gpu").Headless(false).MustLaunch()
+		browser = rod.New().ControlURL(u).MustConnect()
+	} else {
+		browser = rod.New().MustConnect()
 	}
-	return buf, nil
+	//defer browser.Close()
+	urlstr := "https://carbon.supermario.vip/?" + values.Encode() + "&code=t"
+	page := browser.MustPage()
+	err := rod.Try(func() {
+		page.Timeout(10 * time.Second).MustNavigate(urlstr)
+	})
+	if err != nil {
+		return nil, err
+	}
+	//defer page.Close()
+	pt := page.MustElement(".CodeMirror-lines").MustShape().OnePointInside()
+	//模拟鼠标键盘
+	mouse := page.Mouse
+	keyboard := page.Keyboard
+	//移动输入代码
+	mouse.MustMove(pt.X, pt.Y-10)
+	mouse.MustDown("left")
+	mouse.MustUp("left")
+	keyboard.MustDown('\b')
+	keyboard.MustUp('\b')
+	split := strings.Split(code, "\n")
+	for _, s := range split {
+		keyboard.InsertText(s + "\n")
+	}
+	element := page.MustElement("#export-container")
+	box := element.MustShape().Box()
+	logs.Info(box.Width, box.Height)
+
+	element.MustEval(`
+getxy =function(){
+var element=document.getElementById('export-container')
+//计算x坐标
+  var actualLeft = element.offsetLeft;
+  var current = element.offsetParent;
+  while (current !== null){
+    actualLeft += current.offsetLeft;
+    current = current.offsetParent;
+  }
+  //计算y坐标
+  var actualTop = element.offsetTop;
+  var current = element.offsetParent;
+  while (current !== null){
+    actualTop += (current.offsetTop+current.clientTop);
+    current = current.offsetParent;
+  }
+  //返回结果
+  return {x: actualLeft, y: actualTop}
 }
-
-// elementScreenshot takes a screenshot of a specific element.
-func elementScreenshot(urlstr, sel string, res *[]byte) chromedp.Tasks {
-	return chromedp.Tasks{
-		chromedp.EmulateViewport(2560, 1440),
-		chromedp.Navigate(urlstr),
-		screenshot(sel, res, chromedp.NodeReady, chromedp.ByID),
-	}
-}
-func screenshot(sel interface{}, picbuf *[]byte, opts ...chromedp.QueryOption) chromedp.QueryAction {
-	if picbuf == nil {
-		return nil
-	}
-
-	return chromedp.QueryAfter(sel, func(ctx context.Context, time runtime.ExecutionContextID, nodes ...*cdp.Node) error {
-		if len(nodes) < 1 {
-			return fmt.Errorf("selector %q did not return any nodes", sel)
-		}
-		logs.Info("t3")
-		// get layout metrics
-		_, _, contentSize, _, _, _, err := page.GetLayoutMetrics().Do(ctx)
-		if err != nil {
-			return err
-		}
-
-		width, height := int64(math.Ceil(contentSize.Width)), int64(math.Ceil(contentSize.Height))
-
-		// force viewport emulation
-		err = emulation.SetDeviceMetricsOverride(width, height, 1, false).
-			WithScreenOrientation(&emulation.ScreenOrientation{
-				Type:  emulation.OrientationTypePortraitPrimary,
-				Angle: 0,
-			}).
-			Do(ctx)
-		if err != nil {
-			return err
-		}
-
-		// get box model
-		box, err := dom.GetBoxModel().WithNodeID(nodes[0].NodeID).Do(ctx)
-		if err != nil {
-			return err
-		}
-		if len(box.Margin) != 8 {
-			return chromedp.ErrInvalidBoxModel
-		}
-
-		// take screenshot of the box
-		buf, err := page.CaptureScreenshot().
-			WithFormat(page.CaptureScreenshotFormatPng).
-			WithClip(&page.Viewport{
-				X:      math.Round(box.Margin[0]),
-				Y:      math.Round(box.Margin[1]),
-				Width:  math.Round(box.Margin[4] - box.Margin[0]),
-				Height: math.Round(box.Margin[5] - box.Margin[1]),
-				Scale:  1.0,
-			}).Do(ctx)
-		if err != nil {
-			return err
-		}
-
-		*picbuf = buf
-		return nil
-	}, append(opts, chromedp.NodeVisible)...)
+`)
+	vals := page.MustEval("getxy()")
+	img, _ := page.Screenshot(true, &proto.PageCaptureScreenshot{
+		Format:  proto.PageCaptureScreenshotFormatJpeg,
+		Quality: 90,
+		Clip: &proto.PageViewport{
+			X:      vals.Get("x").Num(),
+			Y:      vals.Get("y").Num(),
+			Width:  box.Width,
+			Height: box.Height,
+			Scale:  1,
+		},
+		FromSurface: true,
+	})
+	//bytes, err := page.MustElement("#export-container").Screenshot(proto.PageCaptureScreenshotFormatPng, 100)
+	//if err != nil {
+	//	return nil, err
+	//}
+	return img, nil
 }

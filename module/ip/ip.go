@@ -10,11 +10,11 @@ import (
 	"net/http"
 )
 
-var keyLog *core.Module
+var ip *core.Module
 
 func ExportModule() *core.Module {
-	keyLog = core.NewModule("ip", "ip:"+getIpInfo("").IP, "ip", onReady, exit, nil)
-	return keyLog
+	ip = core.NewModule("ip", "ip:"+getIpInfo("").IP, "ip", onReady, exit, nil)
+	return ip
 }
 func onReady(item *systray.MenuItem) {
 	for {
