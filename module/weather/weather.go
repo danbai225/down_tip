@@ -97,12 +97,12 @@ func weatherUpdate(item *systray.MenuItem) {
 	hourly := res.Result.Hourly
 	//添加子项
 	if len(subItem) == 0 {
-		subItem["alert"] = item.AddSubMenuItem("", "预警")
+		subItem["alert"] = item.AddSubMenuItem("预警信息", "预警")
 		subItem["temperature"] = item.AddSubMenuItem("", "温度和体感温度")
 		subItem["precipitation.nearest"] = item.AddSubMenuItem("", "最近的降水带距离和强度")
 		subItem["precipitation.local"] = item.AddSubMenuItem("", "本地的降水强度")
 		subItem["minutely.description"] = item.AddSubMenuItem("", "天气情况")
-		subItem["hourly"] = item.AddSubMenuItem("预警信息", "未来一天预报")
+		subItem["hourly"] = item.AddSubMenuItem("未来一天预报", "未来一天预报")
 	}
 	//预警
 	if len(alert.Content) == 0 {
