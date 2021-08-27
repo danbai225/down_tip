@@ -3,6 +3,7 @@ package socket
 import (
 	"down_tip/core"
 	"github.com/getlantern/systray"
+	"github.com/skratchdot/open-golang/open"
 )
 
 var socket *core.Module
@@ -15,6 +16,7 @@ func onReady(item *systray.MenuItem) {
 	for {
 		select {
 		case <-item.ClickedCh:
+			open.Run("")
 		}
 	}
 }
