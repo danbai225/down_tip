@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	logs "github.com/danbai225/go-logs"
 	"io/ioutil"
 	"os"
 	"os/exec"
@@ -80,7 +81,10 @@ func getConfigPath(configFileName string) string {
 	exp := fmt.Sprintf("%s%c%s", ExecPathDir(), os.PathSeparator, configFileName)
 	_, err = os.Stat(exp)
 	if err == nil {
-		os.Chdir(ExecPathDir())
+		err = os.Chdir(ExecPathDir())
+		if err != nil {
+			logs.Err(err)
+		}
 		return exp
 	}
 	return configFileName

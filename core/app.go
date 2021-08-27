@@ -16,6 +16,7 @@ import (
 var iconBs []byte
 
 //<editor-fold desc="APP主体结构体">
+
 type App struct {
 	title     []*title
 	module    []*Module
@@ -147,6 +148,10 @@ func (a *App) exit() {
 			go module.exit()
 		}
 	}
+	err := a.g.Shutdown()
+	if err != nil {
+		logs.Err(err)
+	}
 	logs.Info("程序退出")
 }
 func (a *App) RegisterModule(module ...*Module) {
@@ -214,12 +219,18 @@ func (m *Module) Tip(str string, time time.Duration) {
 	}()
 }
 func (m *Module) Notify(str string) {
-	zenity.Notify(str)
+	err := zenity.Notify(str)
+	if err != nil {
+		logs.Err(err)
+	}
 }
 func (m *Module) SaveConfig(c interface{}) {
 	m.Config = c
 	m.app.config.saveConfig(m, m.Config)
-	m.app.config.save()
+	err := m.app.config.save()
+	if err != nil {
+		logs.Err()
+	}
 }
 func (m *Module) GetRootUrl() string {
 	return fmt.Sprintf("http://localhost:%d/%s", m.Port, m.name)
