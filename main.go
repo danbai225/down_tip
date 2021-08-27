@@ -7,6 +7,7 @@ import (
 	"down_tip/module/ip"
 	"down_tip/module/keylog"
 	"down_tip/module/qrcode"
+	"down_tip/module/socket"
 	"down_tip/module/weather"
 	logs "github.com/danbai225/go-logs"
 )
@@ -18,7 +19,15 @@ func main() {
 		return
 	}
 	//注册模块
-	a.RegisterModule(down.ExportModule(), keylog.ExportModule(), ip.ExportModule(), qrcode.ExportModule(), code2img.ExportModule(), weather.ExportModule())
+	a.RegisterModule(
+		down.ExportModule(),
+		keylog.ExportModule(),
+		ip.ExportModule(),
+		qrcode.ExportModule(),
+		code2img.ExportModule(),
+		weather.ExportModule(),
+		socket.ExportModule(),
+	)
 	err = a.Run()
 	if err != nil {
 		logs.Err(err)

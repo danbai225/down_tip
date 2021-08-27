@@ -25,7 +25,11 @@
       "config": {
         "LatitudeAndLongitude": "104.080341124,30.485522248"
       }
-    },"ip": {
+    },
+    "ip": {
+      "enable": true
+    },
+    "socket": {
       "enable": true
     }
   },
