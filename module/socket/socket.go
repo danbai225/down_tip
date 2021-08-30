@@ -30,7 +30,7 @@ func exit() {
 
 }
 
-//go:embed web
+////go:embed web
 var files embed.FS
 
 func router(group *ghttp.RouterGroup) {
@@ -55,4 +55,25 @@ func router(group *ghttp.RouterGroup) {
 			"data": "",
 		})
 	})
+	group.ALL("/ws", func(r *ghttp.Request) {
+		ws, err := r.WebSocket()
+		if err != nil {
+			logs.Err(err)
+			r.Exit()
+		}
+		WebSocketHandle(ws)
+	})
+}
+func WebSocketHandle(ws *ghttp.WebSocket) {
+	//for {
+	//	msgType, msg, err := ws.ReadMessage()
+	//	if err != nil {
+	//		logs.Err(err)
+	//		return
+	//	}
+	//	if err = ws.WriteMessage(msgType, msg); err != nil {
+	//		return
+	//	}
+	//}
+	wsClient{}.New(ws).handle()
 }
