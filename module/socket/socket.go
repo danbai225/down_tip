@@ -36,15 +36,16 @@ var files embed.FS
 func router(group *ghttp.RouterGroup) {
 	group.GET("/*", func(r *ghttp.Request) {
 		path := r.Request.URL.Path
-		logs.Info(path)
 		if path == "/socket" {
 			path = "dist/index.html"
 		} else {
 			path = strings.Replace(path, "/socket", "dist", 1)
 		}
-		logs.Info(path)
 		file, err := files.ReadFile(path)
 		if err == nil {
+			if strings.Contains(path, ".css") {
+				r.Response.Header().Set("Content-Type", "text/css")
+			}
 			r.Response.Write(file)
 		} else {
 			logs.Err(err)
