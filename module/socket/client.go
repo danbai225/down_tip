@@ -8,11 +8,12 @@ import (
 
 //code
 const (
-	TcpConn      = 10001
-	TcpDataWrite = 10002
-	TcpDataRead  = 10003
-	Ok           = 10004
-	Err          = 20001
+	TcpConn       = 11001
+	TcpDataWrite  = 11002
+	TcpDataRead   = 11003
+	TCPDisconnect = 11004
+	Ok            = 10001
+	Err           = 20001
 )
 
 type Msg struct {
@@ -65,13 +66,19 @@ func (w *wsClient) handle() {
 				})
 			}
 			w.clients[TcpDataWrite] = t
-		}
-		if c, has := w.clients[msg.Type]; has {
-			err := c.write([]byte(msg.Data))
-			if err != nil {
-				logs.Err(err)
+		case TCPDisconnect:
+			if w.clients[msg.Type] != nil {
+				w.clients[msg.Type].close()
+			}
+		default:
+			if c, has := w.clients[msg.Type]; has {
+				err := c.write([]byte(msg.Data))
+				if err != nil {
+					logs.Err(err)
+				}
 			}
 		}
+
 	}
 	for _, f := range w.clients {
 		f.close()
