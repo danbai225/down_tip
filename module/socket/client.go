@@ -35,11 +35,21 @@ func (wsClient) New(ws *ghttp.WebSocket) *wsClient {
 	go w.handle()
 	return &w
 }
+func (w *wsClient) sendErrMsg(tag, data string, Type ...int) {
+	t := Err
+	if len(Type) > 1 {
+		t = Type[0]
+	}
+	w.ws.WriteJSON(Msg{
+		Tag:  tag,
+		Type: t,
+		Data: data,
+	})
+}
 func (w *wsClient) handle() {
 	for {
 		_, data, err := w.ws.ReadMessage()
 		if err != nil {
-			logs.Err(err)
 			break
 		}
 		msg := Msg{}
@@ -51,14 +61,9 @@ func (w *wsClient) handle() {
 			c := client{}
 			json.Unmarshal(data, &c)
 			c.ws = w.ws
-			t := tcpClient{}.New(&c)
-			err = t.Conn()
-			if err != nil {
-				w.ws.WriteJSON(Msg{
-					Tag:  "tcp",
-					Type: Err,
-					Data: err.Error(),
-				})
+			t, err2 := tcpClient{}.New(&c)
+			if err2 != nil {
+				w.sendErrMsg("tcp", err2.Error())
 			} else {
 				w.ws.WriteJSON(Msg{
 					Tag:  "tcp",
@@ -86,7 +91,12 @@ func (w *wsClient) handle() {
 }
 
 type client struct {
-	Host string `json:"host"`
-	Port uint16 `json:"port"`
-	ws   *ghttp.WebSocket
+	Host      string `json:"host"`
+	Port      uint16 `json:"port"`
+	ProxyType string `json:"proxy_type"`
+	UserName  string `json:"user_name"`
+	Password  string `json:"password"`
+	ProxyHost string `json:"proxy_host"`
+	ProxyPort uint16 `json:"proxy_port"`
+	ws        *ghttp.WebSocket
 }

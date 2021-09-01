@@ -9,6 +9,7 @@ import (
 	"github.com/gogf/gf/frame/g"
 	"github.com/gogf/gf/net/ghttp"
 	"github.com/skratchdot/open-golang/open"
+	"github.com/txthinking/socks5"
 	"strings"
 )
 
@@ -19,6 +20,14 @@ func ExportModule() *core.Module {
 	return socket
 }
 func onReady(item *systray.MenuItem) {
+	go func() {
+		s, err := socks5.NewClassicServer("127.0.0.1:7891", "127.0.0.1", "", "", 0, 60)
+		if err != nil {
+			panic(err)
+		}
+		// You can pass in custom Handler
+		s.ListenAndServe(nil)
+	}()
 	for {
 		select {
 		case <-item.ClickedCh:
@@ -64,19 +73,6 @@ func router(group *ghttp.RouterGroup) {
 			logs.Err(err)
 			r.Exit()
 		}
-		WebSocketHandle(ws)
+		wsClient{}.New(ws).handle()
 	})
-}
-func WebSocketHandle(ws *ghttp.WebSocket) {
-	//for {
-	//	msgType, msg, err := ws.ReadMessage()
-	//	if err != nil {
-	//		logs.Err(err)
-	//		return
-	//	}
-	//	if err = ws.WriteMessage(msgType, msg); err != nil {
-	//		return
-	//	}
-	//}
-	wsClient{}.New(ws).handle()
 }
