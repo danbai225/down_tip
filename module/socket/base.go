@@ -8,18 +8,23 @@ import (
 
 //code
 const (
-	TcpConn       = 11001
-	TcpDataWrite  = 11002
-	TcpDataRead   = 11003
-	TCPDisconnect = 11004
-	Ok            = 10001
-	Err           = 20001
+	TcpConn          = 11001
+	TcpDataWrite     = 11002
+	TcpDataRead      = 11003
+	TCPDisconnect    = 11004
+	TCPServerNewConn = 11101
+	TCPServerNewMsg  = 11102
+	Ok               = 10001
+	Err              = 20001
+	TCPClientErr     = 20002
+	TCPServerErr     = 20002
 )
 
 type Msg struct {
-	Tag  string `json:"tag"`
-	Type int    `json:"type"`
-	Data string `json:"data"`
+	Tag  string      `json:"tag"`
+	Type int         `json:"type"`
+	Mete interface{} `json:"mete"`
+	Data string      `json:"data"`
 }
 type connApi interface {
 	write([]byte) error
@@ -99,4 +104,9 @@ type client struct {
 	ProxyHost string `json:"proxy_host"`
 	ProxyPort uint16 `json:"proxy_port"`
 	ws        *ghttp.WebSocket
+}
+type server struct {
+	Host string `json:"host"`
+	Port uint16 `json:"port"`
+	ws   *ghttp.WebSocket
 }
