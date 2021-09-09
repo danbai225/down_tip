@@ -12,6 +12,10 @@
         "start_time": "09:00"
       }
     },
+    "ip": {
+      "enable": true,
+      "config": null
+    },
     "key_log": {
       "enable": true,
       "config": null
@@ -20,16 +24,14 @@
       "enable": true,
       "config": null
     },
-    "weather": {
+    "socket": {
       "enable": true,
-      "config": {
-        "LatitudeAndLongitude": "104.080341124,30.485522248"
-      }
+      "config": null
     },
-    "ip": {
+    "socks5proxy": {
       "enable": true
     },
-    "socket": {
+    "weather": {
       "enable": true
     }
   },
