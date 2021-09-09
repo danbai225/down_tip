@@ -31,7 +31,6 @@
     "socks5proxy": {
       "enable": true,
       "config": {
-
       }
     },
     "weather": {

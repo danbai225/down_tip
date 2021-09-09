@@ -145,12 +145,25 @@ func CreateAuth(encrytype string, passwd string) (socks5Auth, error) {
 
 // 加密io复制，可接收加密函数作为参数
 func SecureCopy(src io.ReadWriteCloser, dst io.ReadWriteCloser, secure func(b []byte) error) (written int64, err error) {
-	size := 1024
-	buf := make([]byte, size)
+	defer func() {
+		if src != nil {
+			src.Close()
+		}
+		if dst != nil {
+			dst.Close()
+		}
+	}()
+	buf := make([]byte, 1024)
 	for {
 		nr, er := src.Read(buf)
-		secure(buf)
+		if er != nil {
+			break
+		}
 		if nr > 0 {
+			err = secure(buf)
+			if err != nil {
+				return written, err
+			}
 			nw, ew := dst.Write(buf[0:nr])
 			if nw > 0 {
 				written += int64(nw)
@@ -163,12 +176,6 @@ func SecureCopy(src io.ReadWriteCloser, dst io.ReadWriteCloser, secure func(b []
 				err = io.ErrShortWrite
 				break
 			}
-		}
-		if er != nil {
-			if er != io.EOF {
-				err = er
-			}
-			break
 		}
 	}
 	return written, err
