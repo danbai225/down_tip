@@ -28,11 +28,11 @@ type App struct {
 }
 
 func NewApp(configPath ...string) (*App, error) {
-	path := "config.json"
+	configP := "config.json"
 	if len(configPath) > 0 {
-		path = configPath[0]
+		configP = configPath[0]
 	}
-	app := App{config: config{configName: path},
+	app := App{config: config{configName: configP},
 		title: make([]*title, 0), module: make([]*Module, 0), tip: make(chan tip, 10),
 		index: func(r *ghttp.Request) {
 			r.Response.Write("hello downTip")
@@ -48,6 +48,9 @@ func NewApp(configPath ...string) (*App, error) {
 		app.config.HTTPPort = 7989
 	}
 	app.g.SetPort(int(app.config.HTTPPort))
+	if app.config.LogsDir != "" {
+		logs.SetLogsDir(app.config.LogsDir)
+	}
 	return &app, nil
 }
 func (a *App) addTitle(module *Module, titleText string) {

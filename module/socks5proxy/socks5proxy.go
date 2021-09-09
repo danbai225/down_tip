@@ -55,7 +55,6 @@ func onReady(item *systray.MenuItem) {
 				go conn()
 				item.SetTitle("点击断开")
 			} else {
-				logs.Info("3333")
 				close()
 				connflag = false
 			}
@@ -63,7 +62,6 @@ func onReady(item *systray.MenuItem) {
 	}
 }
 func conn() {
-	logs.Info("123")
 	if connflag {
 		return
 	}

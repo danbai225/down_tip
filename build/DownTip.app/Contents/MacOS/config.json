@@ -1,9 +1,41 @@
 {
-  "module":{
+  "module": {
+    "code2img": {
+      "enable": true,
+      "config": null
+    },
     "down": {
-      "start_time": "09:00",
-      "end_time": "18:00",
-      "elasticity": false
+      "enable": true,
+      "config": {
+        "elasticity": false,
+        "end_time": "18:00",
+        "start_time": "09:00"
+      }
+    },
+    "ip": {
+      "enable": true,
+      "config": null
+    },
+    "key_log": {
+      "enable": true,
+      "config": null
+    },
+    "qrCode": {
+      "enable": true,
+      "config": null
+    },
+    "socket": {
+      "enable": true,
+      "config": null
+    },
+    "socks5proxy": {
+      "enable": true
+    },
+    "weather": {
+      "enable": true,
+      "config": null
     }
-  }
+  },
+  "http_port": 7989,
+  "logs_dir": "./logs"
 }

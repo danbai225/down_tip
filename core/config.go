@@ -18,6 +18,7 @@ type config struct {
 	Module     map[string]ModuleConfig `json:"module"`
 	configName string
 	HTTPPort   uint16 `json:"http_port"`
+	LogsDir    string `json:"logs_dir"`
 }
 
 func (c *config) getConfig(module *Module) interface{} {

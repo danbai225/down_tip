@@ -32,8 +32,10 @@
       "enable": true
     },
     "weather": {
-      "enable": true
+      "enable": true,
+      "config": null
     }
   },
-  "http_port": 7989
+  "http_port": 7989,
+  "logs_dir": "./logs"
 }

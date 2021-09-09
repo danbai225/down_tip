@@ -11,10 +11,17 @@ import (
 	"down_tip/module/socks5proxy"
 	"down_tip/module/weather"
 	logs "github.com/danbai225/go-logs"
+	"os"
 )
 
 func main() {
-	a, err := core.NewApp()
+	var a *core.App
+	var err error
+	if len(os.Args) > 1 {
+		a, err = core.NewApp(os.Args[1])
+	} else {
+		a, err = core.NewApp()
+	}
 	if err != nil {
 		logs.Err(err)
 		return
