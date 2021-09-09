@@ -17,7 +17,7 @@ type TcpClient struct {
 }
 
 func handleProxyRequest(localClient *net.TCPConn, serverAddr *net.TCPAddr, auth socks5Auth, recvHTTPProto string) {
-
+	defer localClient.Close()
 	// 远程连接IO
 	dstServer, err := net.DialTCP("tcp", nil, serverAddr)
 	if err != nil {
@@ -26,9 +26,6 @@ func handleProxyRequest(localClient *net.TCPConn, serverAddr *net.TCPAddr, auth 
 		return
 	}
 	defer dstServer.Close()
-
-	defer localClient.Close()
-
 	// 和远程端建立安全信道
 	wg := new(sync.WaitGroup)
 	wg.Add(2)

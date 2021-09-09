@@ -69,7 +69,7 @@ func conn() {
 		defer func() {
 			rootItem.SetTitle("点击连接服务端")
 		}()
-		err := client(":8888", config.Host+":"+config.Port, "random", config.Password, "socks5")
+		err := client(":8888", config.Host+":"+config.Port, "random", config.Password, "socks")
 		if err != nil {
 			logs.Err(err)
 		}
