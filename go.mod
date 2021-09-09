@@ -4,7 +4,7 @@ go 1.16
 
 require (
 	github.com/axgle/mahonia v0.0.0-20180208002826-3358181d7394
-	github.com/danbai225/go-logs v0.0.5
+	github.com/danbai225/go-logs v0.0.6
 	github.com/getlantern/systray v1.1.0
 	github.com/go-rod/rod v0.101.5
 	github.com/gogf/gf v1.16.5
