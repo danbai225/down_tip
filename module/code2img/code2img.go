@@ -1,7 +1,7 @@
 package code2img
 
 import (
-	"down_tip/core"
+	"github.com/danbai225/tipbar/core"
 	"github.com/getlantern/systray"
 	"github.com/go-rod/rod"
 	"github.com/go-rod/rod/lib/launcher"

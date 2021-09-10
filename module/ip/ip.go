@@ -1,9 +1,9 @@
 package ip
 
 import (
-	"down_tip/core"
 	"encoding/json"
 	"github.com/axgle/mahonia"
+	"github.com/danbai225/tipbar/core"
 	"github.com/getlantern/systray"
 	"golang.design/x/clipboard"
 	"io/ioutil"

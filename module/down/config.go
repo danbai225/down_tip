@@ -1,9 +1,9 @@
 package down
 
 import (
-	"down_tip/core"
 	"errors"
 	"fmt"
+	"github.com/danbai225/tipbar/core"
 	"strconv"
 	"strings"
 	"time"

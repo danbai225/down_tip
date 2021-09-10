@@ -1,7 +1,6 @@
 package main
 
 import (
-	"down_tip/core"
 	"down_tip/module/code2img"
 	"down_tip/module/down"
 	"down_tip/module/ip"
@@ -11,6 +10,7 @@ import (
 	"down_tip/module/socks5proxy"
 	"down_tip/module/weather"
 	logs "github.com/danbai225/go-logs"
+	"github.com/danbai225/tipbar/core"
 	"os"
 )
 

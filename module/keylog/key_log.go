@@ -1,8 +1,8 @@
 package keylog
 
 import (
-	"down_tip/core"
 	_ "embed"
+	"github.com/danbai225/tipbar/core"
 	"github.com/getlantern/systray"
 	"github.com/gogf/gf/frame/g"
 	"github.com/gogf/gf/net/ghttp"

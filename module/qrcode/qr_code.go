@@ -2,8 +2,8 @@ package qrcode
 
 import (
 	"bytes"
-	"down_tip/core"
 	logs "github.com/danbai225/go-logs"
+	"github.com/danbai225/tipbar/core"
 	"github.com/getlantern/systray"
 	"github.com/makiuchi-d/gozxing"
 	"github.com/makiuchi-d/gozxing/qrcode"
