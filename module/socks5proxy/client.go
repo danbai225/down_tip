@@ -3,7 +3,6 @@ package socks5proxy
 import (
 	logs "github.com/danbai225/go-logs"
 	"net"
-	"sync/atomic"
 )
 
 type TcpClient struct {
@@ -11,13 +10,7 @@ type TcpClient struct {
 	server *net.TCPAddr
 }
 
-var count = int64(0)
-
 func handleProxyRequest(localClient *net.TCPConn, serverAddr *net.TCPAddr, auth socks5Auth, recvHTTPProto string) {
-	atomic.AddInt64(&count, 1)
-	//logs.Info("start num:",atomic.LoadInt64(&count))
-	defer atomic.AddInt64(&count, -1)
-	// 远程连接IO
 	dstServer, err := net.DialTCP("tcp", nil, serverAddr)
 	if err != nil {
 		logs.Err("远程服务器地址连接错误!!!", err)
@@ -25,7 +18,6 @@ func handleProxyRequest(localClient *net.TCPConn, serverAddr *net.TCPAddr, auth 
 	}
 	go SecureCopy(dstServer, localClient, auth.Decrypt)
 	SecureCopy(localClient, dstServer, auth.Encrypt)
-	//logs.Info("end num:",atomic.LoadInt64(&count))
 }
 
 var listener *net.TCPListener

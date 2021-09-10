@@ -36,6 +36,10 @@ func onReady(item *systray.MenuItem) {
 	socks5.UnmarshalConfig(&config)
 	item.SetTitle("点击连接服务端")
 	rootItem = item
+	if config.Host != "" && config.Port != "" {
+		conn()
+		item.SetTitle("点击断开")
+	}
 	for {
 		select {
 		case <-item.ClickedCh:
