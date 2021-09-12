@@ -6,34 +6,61 @@ import (
 	"github.com/go-rod/rod"
 	"github.com/go-rod/rod/lib/launcher"
 	"github.com/go-rod/rod/lib/proto"
+	"github.com/gogf/gf/net/ghttp"
+	"github.com/ncruces/zenity"
+	"github.com/skratchdot/open-golang/open"
 	"golang.design/x/clipboard"
 	"net/url"
+	"runtime"
 	"strings"
 	"time"
 )
 
 var code2img *core.Module
+var imgData []byte
+var language = "auto"
 
 func ExportModule() *core.Module {
-	code2img = core.NewModule("code2img", "代码转图片", "把剪贴板中的代码转成图片", onReady, exit, nil)
+	code2img = core.NewModule("code2img", "代码转图片", "把剪贴板中的代码转成图片", onReady, exit, showImg)
 	return code2img
 }
 
+func showImg(group *ghttp.RouterGroup) {
+	group.GET("/", func(r *ghttp.Request) {
+		if len(imgData) > 0 {
+			r.Response.Write(imgData)
+		}
+
+	})
+}
 func onReady(item *systray.MenuItem) {
+	go2 := item.AddSubMenuItem("点击转换", "转换")
+	l := item.AddSubMenuItem("设置语言:"+language, "设置语言")
 	for {
 		select {
-		case <-item.ClickedCh:
+		case <-go2.ClickedCh:
 			code := string(clipboard.Read(clipboard.FmtText))
 			if code != "" {
 				img, err := code2Img(code)
+				imgData = img
 				if err == nil {
 					code2img.Notify("转换成功")
-					clipboard.Write(clipboard.FmtImage, img)
+					if runtime.GOOS == "windows" {
+						open.Run(code2img.GetRootUrl())
+					} else {
+						clipboard.Write(clipboard.FmtImage, img)
+					}
 				} else {
 					code2img.Notify("转换失败")
 				}
 			} else {
 				code2img.Notify("没有找到剪贴板中的代码")
+			}
+		case <-l.ClickedCh:
+			entry, err := zenity.Entry("请输入语言")
+			if err == nil {
+				language = entry
+				l.SetTitle("设置语言:" + language)
 			}
 		}
 	}
@@ -64,6 +91,9 @@ func code2Img(code string, Options ...map[string]string) ([]byte, error) {
 		"si":     "false",              //平方图像
 		"es":     "1x",                 // 出口尺寸
 		"wm":     "false",              // 水印
+	}
+	if language != "" {
+		carbonOptions["l"] = language
 	}
 	if len(Options) > 0 {
 		for k, v := range Options[0] {

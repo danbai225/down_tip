@@ -11,18 +11,18 @@ import (
 	"golang.design/x/clipboard"
 	"image"
 	_ "image/jpeg"
-	"time"
 )
 
 var qrCode *core.Module
 
 func ExportModule() *core.Module {
-	qrCode = core.NewModule("qrCode", "qrCode->点击识别", "识别剪贴板二维码", onReady, exit, nil)
+	qrCode = core.NewModule("qrCode", "二维码识别", "识别剪贴板二维码", onReady, exit, nil)
 	return qrCode
 }
 func onReady(item *systray.MenuItem) {
 	browser := true
 	chekd := item.AddSubMenuItem("浏览器打开->点击切换", "识别后打开浏览器")
+	discern := item.AddSubMenuItem("识别剪切板中二维码图片", "点击识别")
 	for {
 		select {
 		case <-chekd.ClickedCh:
@@ -32,23 +32,22 @@ func onReady(item *systray.MenuItem) {
 				chekd.SetTitle("替换剪切板")
 			}
 			browser = !browser
-		case <-item.ClickedCh:
+		case <-discern.ClickedCh:
 			read := clipboard.Read(clipboard.FmtImage)
 			if len(read) > 0 {
 				code := readTheQRCode(read)
 				if code != "" {
-					qrCode.Tip("解析成功", time.Second)
+					qrCode.Notify("解析成功")
 					if browser {
-						open.Run(code)
+						_ = open.Run(code)
 					} else {
-						logs.Info(code)
 						clipboard.Write(clipboard.FmtText, []byte(code))
 					}
 				} else {
-					qrCode.Tip("解析失败", time.Second)
+					qrCode.Notify("解析失败")
 				}
 			} else {
-				qrCode.Tip("没有检测到二维码", time.Second)
+				qrCode.Notify("没有检测到二维码,请使用截图软件将二维码截取至粘贴板")
 			}
 		}
 	}
