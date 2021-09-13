@@ -9,7 +9,6 @@ require (
 	github.com/getlantern/systray v1.1.0
 	github.com/go-rod/rod v0.101.6
 	github.com/gogf/gf v1.16.6
-	github.com/kbinani/screenshot v0.0.0-20210720154843-7d3a670d8329
 	github.com/makiuchi-d/gozxing v0.0.2
 	github.com/ncruces/zenity v0.7.12
 	github.com/robotn/gohook v0.31.0
@@ -25,7 +24,6 @@ require (
 	github.com/dchest/jsmin v0.0.0-20160823214000-faeced883947 // indirect
 	github.com/fatih/color v1.12.0 // indirect
 	github.com/fsnotify/fsnotify v1.4.9 // indirect
-	github.com/gen2brain/shm v0.0.0-20200228170931-49f9650110c5 // indirect
 	github.com/getlantern/context v0.0.0-20190109183933-c447772a6520 // indirect
 	github.com/getlantern/errors v0.0.0-20190325191628-abdb3e3e36f7 // indirect
 	github.com/getlantern/golog v0.0.0-20190830074920-4ef2e798c2d7 // indirect
@@ -38,11 +36,9 @@ require (
 	github.com/gomodule/redigo v1.8.5 // indirect
 	github.com/gorilla/websocket v1.4.2 // indirect
 	github.com/grokify/html-strip-tags-go v0.0.0-20190921062105-daaa06bf1aaf // indirect
-	github.com/jezek/xgb v0.0.0-20210312150743-0e0f116e1240 // indirect
 	github.com/josephspurrier/goversioninfo v1.3.0 // indirect
 	github.com/kpango/fastime v1.0.17 // indirect
 	github.com/kpango/glg v1.6.4 // indirect
-	github.com/lxn/win v0.0.0-20210218163916-a377121e959e // indirect
 	github.com/mattn/go-colorable v0.1.8 // indirect
 	github.com/mattn/go-isatty v0.0.12 // indirect
 	github.com/mattn/go-runewidth v0.0.9 // indirect
