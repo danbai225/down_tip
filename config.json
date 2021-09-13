@@ -29,7 +29,12 @@
       "config": null
     },
     "socks5proxy": {
-      "enable": true
+      "enable": true,
+      "config": {
+        "Host": "hly506.tpddns.cn",
+        "Port": "18888",
+        "Password": "123456"
+      }
     },
     "weather": {
       "enable": true,

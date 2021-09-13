@@ -1,8 +1,10 @@
 package socks5proxy
 
 import (
+	"errors"
 	logs "github.com/danbai225/go-logs"
 	"net"
+	"sync/atomic"
 )
 
 type TcpClient struct {
@@ -10,19 +12,25 @@ type TcpClient struct {
 	server *net.TCPAddr
 }
 
-func handleProxyRequest(localClient *net.TCPConn, serverAddr *net.TCPAddr, auth socks5Auth, recvHTTPProto string) {
+var count = int64(0)
+
+func handleProxyRequest(localClient *net.TCPConn, serverAddr *net.TCPAddr, auth socks5Auth) {
+	atomic.AddInt64(&count, 1)
+	defer atomic.AddInt64(&count, -1)
+	defer logs.Info("当前连接数", atomic.LoadInt64(&count))
+	logs.Info("当前连接数", atomic.LoadInt64(&count))
 	dstServer, err := net.DialTCP("tcp", nil, serverAddr)
 	if err != nil {
 		logs.Err("远程服务器地址连接错误!!!", err)
 		return
 	}
-	go SecureCopy(dstServer, localClient, auth.Decrypt)
-	SecureCopy(localClient, dstServer, auth.Encrypt)
+	go secureCopy(dstServer, localClient, auth.Decrypt)
+	secureCopy(localClient, dstServer, auth.Encrypt)
 }
 
 var listener *net.TCPListener
 
-func client(listenAddrString string, serverAddrString string, encrytype string, passwd string, recvHTTPProto string) error {
+func client(listenAddrString string, serverAddrString string, encrytype string, passwd string) error {
 	//所有客户服务端的流都加密,
 	var err error
 	auth, err := CreateAuth(encrytype, passwd)
@@ -50,13 +58,17 @@ func client(listenAddrString string, serverAddrString string, encrytype string, 
 	}
 
 	for {
-		localClient, err := listener.AcceptTCP()
-		if err != nil {
-			return err
+		if listener != nil {
+			localClient, err2 := listener.AcceptTCP()
+			if err2 != nil {
+				return err2
+			}
+			go handleProxyRequest(localClient, serverAddr, auth)
+		} else {
+			return errors.New("listener nil")
 		}
-		go handleProxyRequest(localClient, serverAddr, auth, recvHTTPProto)
 	}
 }
-func close() {
+func closeListener() {
 	listener.Close()
 }

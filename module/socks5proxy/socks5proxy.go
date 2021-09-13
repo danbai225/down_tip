@@ -34,7 +34,7 @@ var rootItem *systray.MenuItem
 
 func onReady(item *systray.MenuItem) {
 	socks5.UnmarshalConfig(&config)
-	item.SetTitle("点击连接服务端")
+	item.SetTitle("点击运行客户端")
 	rootItem = item
 	if config.Host != "" && config.Port != "" {
 		conn()
@@ -54,12 +54,16 @@ func onReady(item *systray.MenuItem) {
 					pass, _ := zenity.Entry("Password",
 						zenity.Title("请输入Password"))
 					config.Password = pass
-					socks5.SaveConfig(config)
+					if host != "" && pass != "" && port != "" {
+						socks5.SaveConfig(config)
+					} else {
+						continue
+					}
 				}
 				go conn()
 				item.SetTitle("点击断开")
 			} else {
-				close()
+				closeListener()
 				connflag = false
 			}
 		}
@@ -71,9 +75,9 @@ func conn() {
 	}
 	go func() {
 		defer func() {
-			rootItem.SetTitle("点击连接服务端")
+			rootItem.SetTitle("点击运行客户端")
 		}()
-		err := client(":8888", config.Host+":"+config.Port, "random", config.Password, "socks")
+		err := client(":8888", config.Host+":"+config.Port, "random", config.Password)
 		if err != nil {
 			logs.Err(err)
 		}

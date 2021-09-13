@@ -107,6 +107,8 @@ github.com/txthinking/x v0.0.0-20210326105829-476fab902fbe h1:gMWxZxBFRAXqoGkwkY
 github.com/txthinking/x v0.0.0-20210326105829-476fab902fbe/go.mod h1:WgqbSEmUYSjEV3B1qmee/PpP2NYEz4bL9/+mF1ma+s4=
 github.com/vcaesar/tt v0.11.0 h1:obQecjgbnAxxC6OYGY6yDvhGRW2PR5wD8Ma2uJH3WGA=
 github.com/vcaesar/tt v0.11.0/go.mod h1:GHPxQYhn+7OgKakRusH7KJ0M5MhywoeLb8Fcffs/Gtg=
+github.com/xtaci/smux v1.5.15 h1:6hMiXswcleXj5oNfcJc+DXS8Vj36XX2LaX98udog6Kc=
+github.com/xtaci/smux v1.5.15/go.mod h1:OMlQbT5vcgl2gb49mFkYo6SMf+zP3rcjcwQz7ZU7IGY=
 github.com/ysmood/goob v0.3.0 h1:XZ51cZJ4W3WCoCiUktixzMIQF86W7G5VFL4QQ/Q2uS0=
 github.com/ysmood/goob v0.3.0/go.mod h1:S3lq113Y91y1UBf1wj1pFOxeahvfKkCk6mTWTWbDdWs=
 github.com/ysmood/got v0.15.1 h1:X5jAbMyBf5yeezuFMp9HaMGXZWMSqIQcUlAHI+kJmUs=

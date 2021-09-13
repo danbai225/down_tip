@@ -14,6 +14,7 @@ require (
 	github.com/robotn/gohook v0.31.0
 	github.com/skratchdot/open-golang v0.0.0-20200116055534-eef842397966
 	github.com/txthinking/socks5 v0.0.0-20210716140126-fa1f52a8f2da
+	github.com/xtaci/smux v1.5.15
 	golang.design/x/clipboard v0.5.1
 )
 
