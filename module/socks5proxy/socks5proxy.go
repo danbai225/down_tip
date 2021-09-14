@@ -2,13 +2,14 @@ package socks5proxy
 
 import (
 	logs "github.com/danbai225/go-logs"
+	"github.com/danbai225/tcpproxy"
 	"github.com/danbai225/tipbar/core"
 	"github.com/getlantern/systray"
 	"github.com/gogf/gf/net/ghttp"
 	"github.com/ncruces/zenity"
 )
 
-//https://github.com/shikanon/socks5proxy 客户端套壳socks5
+//https://github.com/danbai225/tcpproxy客户端套壳socks5
 var socks5 *core.Module
 
 type socks5Config struct {
@@ -31,6 +32,7 @@ func router(group *ghttp.RouterGroup) {
 
 var connflag = false
 var rootItem *systray.MenuItem
+var client *tcpproxy.Client
 
 func onReady(item *systray.MenuItem) {
 	socks5.UnmarshalConfig(&config)
@@ -63,8 +65,9 @@ func onReady(item *systray.MenuItem) {
 				go conn()
 				item.SetTitle("点击断开")
 			} else {
-				closeListener()
 				connflag = false
+				rootItem.SetTitle("点击运行客户端")
+				client.Stop()
 			}
 		}
 	}
@@ -77,7 +80,9 @@ func conn() {
 		defer func() {
 			rootItem.SetTitle("点击运行客户端")
 		}()
-		err := client(":8888", config.Host+":"+config.Port, "random", config.Password)
+		client = tcpproxy.Client{}.New(config.Password, config.Host+":"+config.Port, ":8888")
+		err := client.Start()
+		connflag = false
 		if err != nil {
 			logs.Err(err)
 		}

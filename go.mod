@@ -4,7 +4,8 @@ go 1.17
 
 require (
 	github.com/axgle/mahonia v0.0.0-20180208002826-3358181d7394
-	github.com/danbai225/go-logs v0.0.6
+	github.com/danbai225/go-logs v0.0.7
+	github.com/danbai225/tcpproxy v0.0.5
 	github.com/danbai225/tipbar v0.0.1
 	github.com/getlantern/systray v1.1.0
 	github.com/go-rod/rod v0.101.6
@@ -14,7 +15,6 @@ require (
 	github.com/robotn/gohook v0.31.0
 	github.com/skratchdot/open-golang v0.0.0-20200116055534-eef842397966
 	github.com/txthinking/socks5 v0.0.0-20210716140126-fa1f52a8f2da
-	github.com/xtaci/smux v1.5.15
 	golang.design/x/clipboard v0.5.1
 )
 
@@ -49,6 +49,7 @@ require (
 	github.com/randall77/makefat v0.0.0-20210315173500-7ddd0e42c844 // indirect
 	github.com/txthinking/runnergroup v0.0.0-20210608031112-152c7c4432bf // indirect
 	github.com/txthinking/x v0.0.0-20210326105829-476fab902fbe // indirect
+	github.com/xtaci/smux v1.5.15 // indirect
 	github.com/ysmood/goob v0.3.0 // indirect
 	github.com/ysmood/gson v0.6.4 // indirect
 	github.com/ysmood/leakless v0.7.0 // indirect
