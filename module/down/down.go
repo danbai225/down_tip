@@ -22,7 +22,7 @@ func onReady(item *systray.MenuItem) {
 	go func() {
 		for {
 			item.SetTitle("down:" + getTheRemainingTime())
-			time.Sleep(time.Second)
+			time.Sleep(time.Second * 5)
 		}
 	}()
 	//增加一个今日时间选项

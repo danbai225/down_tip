@@ -35,7 +35,7 @@ var rootItem *systray.MenuItem
 var client *tcpproxy.Client
 
 func onReady(item *systray.MenuItem) {
-	socks5.UnmarshalConfig(&config)
+	_ = socks5.UnmarshalConfig(&config)
 	item.SetTitle("点击运行客户端")
 	rootItem = item
 	if config.Host != "" && config.Port != "" {
@@ -67,7 +67,8 @@ func onReady(item *systray.MenuItem) {
 			} else {
 				connflag = false
 				rootItem.SetTitle("点击运行客户端")
-				client.Stop()
+				_ = client.Stop()
+				logs.Info("客户端已经关闭")
 			}
 		}
 	}
