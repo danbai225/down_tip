@@ -111,7 +111,7 @@ func getIP(domain string) []string {
 	}
 	m := dns.Msg{}
 	m.SetQuestion(dns.Fqdn(domain), dns.TypeA)
-	r, _, err := c.Exchange(&m, "223.5.5.5:53")
+	r, _, err := c.Exchange(&m, "8.8.8.8:53")
 	if err != nil {
 		logs.Err(err)
 		return dst
