@@ -11,6 +11,7 @@ require (
 	github.com/go-rod/rod v0.106.1
 	github.com/gogf/gf v1.16.7
 	github.com/makiuchi-d/gozxing v0.1.1
+	github.com/miekg/dns v1.1.48
 	github.com/ncruces/zenity v0.8.2
 	github.com/robotn/gohook v0.40.0
 	github.com/skratchdot/open-golang v0.0.0-20200116055534-eef842397966
@@ -60,9 +61,11 @@ require (
 	golang.org/x/exp v0.0.0-20190731235908-ec7cb31e5a56 // indirect
 	golang.org/x/image v0.0.0-20220321031419-a8550c1d254a // indirect
 	golang.org/x/mobile v0.0.0-20210716004757-34ab1303b554 // indirect
-	golang.org/x/net v0.0.0-20210520170846-37e1c6afe023 // indirect
+	golang.org/x/mod v0.4.2 // indirect
+	golang.org/x/net v0.0.0-20210726213435-c6fcb2dbf985 // indirect
 	golang.org/x/sys v0.0.0-20220405052023-b1e9470b6e64 // indirect
 	golang.org/x/text v0.3.7 // indirect
+	golang.org/x/tools v0.1.6-0.20210726203631-07bc1bf47fb2 // indirect
 	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1 // indirect
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b // indirect
 )

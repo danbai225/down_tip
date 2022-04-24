@@ -166,9 +166,10 @@ var element=document.getElementById('export-container')
 }
 `)
 	vals := page.MustEval("getxy()")
+	i := 90
 	img, _ := page.Screenshot(true, &proto.PageCaptureScreenshot{
 		Format:  proto.PageCaptureScreenshotFormatJpeg,
-		Quality: 90,
+		Quality: &i,
 		Clip: &proto.PageViewport{
 			X:      vals.Get("x").Num(),
 			Y:      vals.Get("y").Num(),

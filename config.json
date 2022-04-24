@@ -26,7 +26,12 @@
     },
     "socket": {
       "enable": true,
-      "config": null
+      "config": {
+        "Host": "",
+        "Password": "",
+        "Port": "",
+        "l_port": ""
+      }
     },
     "socks5proxy": {
       "enable": true,

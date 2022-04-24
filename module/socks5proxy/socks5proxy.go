@@ -6,7 +6,10 @@ import (
 	"github.com/danbai225/tipbar/core"
 	"github.com/getlantern/systray"
 	"github.com/gogf/gf/net/ghttp"
+	"github.com/miekg/dns"
 	"github.com/ncruces/zenity"
+	"regexp"
+	"time"
 )
 
 //https://github.com/danbai225/tcpproxy客户端套壳socks5
@@ -16,6 +19,7 @@ type socks5Config struct {
 	Host     string
 	Port     string
 	Password string
+	LPort    string `json:"l_port"`
 }
 
 var config = socks5Config{}
@@ -81,7 +85,14 @@ func conn() {
 		defer func() {
 			rootItem.SetTitle("点击运行客户端")
 		}()
-		client = tcpproxy.Client{}.New(config.Password, config.Host+":"+config.Port, ":8888")
+		ip := "config.Host"
+		if isDomain(config.Host) {
+			ips := getIP(config.Host)
+			if len(ips) > 0 {
+				ip = ips[0]
+			}
+		}
+		client = tcpproxy.Client{}.New(config.Password, ip+":"+config.Port, ":"+config.LPort)
 		err := client.Start()
 		connflag = false
 		if err != nil {
@@ -92,4 +103,28 @@ func conn() {
 }
 func exit() {
 
+}
+func getIP(domain string) []string {
+	var dst []string
+	c := dns.Client{
+		Timeout: 5 * time.Second,
+	}
+	m := dns.Msg{}
+	m.SetQuestion(dns.Fqdn(domain), dns.TypeA)
+	r, _, err := c.Exchange(&m, "223.5.5.5:53")
+	if err != nil {
+		logs.Err(err)
+		return dst
+	}
+	for _, ans := range r.Answer {
+		record, isType := ans.(*dns.A)
+		if isType {
+			dst = append(dst, record.A.String())
+		}
+	}
+	return dst
+}
+func isDomain(text string) bool {
+	compile := regexp.MustCompile(".*[a-zA-Z].*")
+	return compile.MatchString(text)
 }
