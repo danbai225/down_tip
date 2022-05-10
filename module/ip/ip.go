@@ -3,6 +3,7 @@ package ip
 import (
 	"encoding/json"
 	"github.com/axgle/mahonia"
+	logs "github.com/danbai225/go-logs"
 	"github.com/danbai225/tipbar/core"
 	"github.com/getlantern/systray"
 	"golang.design/x/clipboard"
@@ -44,12 +45,15 @@ type ipInfo struct {
 
 func getIpInfo(ip string) ipInfo {
 	info := ipInfo{}
-	get, err := http.Get("http://whois.pconline.com.cn/ipJson.jsp?json=true&ip=" + ip)
+	get, err := http.Get("https://whois.pconline.com.cn/ipJson.jsp?json=true&ip=" + ip)
 	if err != nil {
-		println(err)
+		logs.Err(err)
 	} else {
 		all, _ := ioutil.ReadAll(get.Body)
-		json.Unmarshal([]byte(mahonia.NewDecoder("gbk").ConvertString(string(all))), &info)
+		err = json.Unmarshal([]byte(mahonia.NewDecoder("gbk").ConvertString(string(all))), &info)
+		if err != nil {
+			logs.Err(err)
+		}
 	}
 	return info
 }

@@ -5,10 +5,12 @@ import (
 	"github.com/danbai225/tcpproxy"
 	"github.com/danbai225/tipbar/core"
 	"github.com/getlantern/systray"
+	"github.com/gogf/gf/container/gset"
 	"github.com/gogf/gf/net/ghttp"
 	"github.com/miekg/dns"
 	"github.com/ncruces/zenity"
 	"regexp"
+	"sync"
 	"time"
 )
 
@@ -85,18 +87,19 @@ func conn() {
 		defer func() {
 			rootItem.SetTitle("点击运行客户端")
 		}()
-		ip := "config.Host"
 		if isDomain(config.Host) {
-			ips := getIP(config.Host)
-			if len(ips) > 0 {
-				ip = ips[0]
+			ips := getIP(config.Host, []string{"223.5.5.5", "114.114.114.114", "8.8.8.8", "1.1.1.1"})
+			for _, ip := range ips {
+				client = tcpproxy.Client{}.New(config.Password, ip+":"+config.Port, ":"+config.LPort)
+				err := client.Start()
+				connflag = false
+				if err != nil {
+					logs.Err(err)
+				} else {
+					logs.Info("连接成功：", ip)
+					break
+				}
 			}
-		}
-		client = tcpproxy.Client{}.New(config.Password, ip+":"+config.Port, ":"+config.LPort)
-		err := client.Start()
-		connflag = false
-		if err != nil {
-			logs.Err(err)
 		}
 	}()
 	connflag = true
@@ -104,23 +107,36 @@ func conn() {
 func exit() {
 
 }
-func getIP(domain string) []string {
+func getIP(domain string, dnsList []string) []string {
+	set := gset.New(true)
 	var dst []string
-	c := dns.Client{
-		Timeout: 5 * time.Second,
+	group := &sync.WaitGroup{}
+	for _, s := range dnsList {
+		group.Add(1)
+		go func(ip string) {
+			defer group.Done()
+			c := dns.Client{
+				Timeout: 5 * time.Second,
+			}
+			m := dns.Msg{}
+			m.SetQuestion(dns.Fqdn(domain), dns.TypeA)
+			r, _, err := c.Exchange(&m, ip+":53")
+			if err != nil {
+				logs.Err(err)
+				return
+			}
+			for _, ans := range r.Answer {
+				record, isType := ans.(*dns.A)
+				if isType {
+					set.Add(record.A.String())
+				}
+			}
+		}(s)
 	}
-	m := dns.Msg{}
-	m.SetQuestion(dns.Fqdn(domain), dns.TypeA)
-	r, _, err := c.Exchange(&m, "223.5.5.5:53")
-	if err != nil {
-		logs.Err(err)
-		return dst
-	}
-	for _, ans := range r.Answer {
-		record, isType := ans.(*dns.A)
-		if isType {
-			dst = append(dst, record.A.String())
-		}
+	group.Wait()
+	slice := set.Slice()
+	for _, i := range slice {
+		dst = append(dst, i.(string))
 	}
 	return dst
 }

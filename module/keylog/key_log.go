@@ -2,6 +2,7 @@ package keylog
 
 import (
 	_ "embed"
+	logs "github.com/danbai225/go-logs"
 	"github.com/danbai225/tipbar/core"
 	"github.com/getlantern/systray"
 	"github.com/gogf/gf/frame/g"
@@ -27,7 +28,7 @@ func router(group *ghttp.RouterGroup) {
 		r.Response.Write(indexHtml)
 	})
 	group.GET("/api", func(r *ghttp.Request) {
-		r.Response.WriteJson(g.Map{
+		_ = r.Response.WriteJson(g.Map{
 			"msg":  "获取成功",
 			"code": 0,
 			"data": getKeyLog(),
@@ -39,7 +40,10 @@ func onReady(item *systray.MenuItem) {
 	for {
 		select {
 		case <-item.ClickedCh:
-			open.Run(keyLog.GetRootUrl())
+			err := open.Run(keyLog.GetRootUrl())
+			if err != nil {
+				logs.Err(err)
+			}
 		}
 	}
 }

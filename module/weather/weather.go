@@ -81,6 +81,7 @@ func weatherUpdate(item *systray.MenuItem) {
 	url := fmt.Sprintf("https://api.caiyunapp.com/v2.5/ujp0HddE4bY2SwRc/%s/weather.json?unit=metric:v2&alert=true", config.LatitudeAndLongitude)
 	resp, err := http.Get(url)
 	if err != nil {
+		logs.Err(err)
 		weather.Notify("获取失败:" + err.Error())
 		return
 	}

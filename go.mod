@@ -4,7 +4,7 @@ go 1.17
 
 require (
 	github.com/axgle/mahonia v0.0.0-20180208002826-3358181d7394
-	github.com/danbai225/go-logs v0.0.9
+	github.com/danbai225/go-logs v0.1.3
 	github.com/danbai225/tcpproxy v0.0.5
 	github.com/danbai225/tipbar v0.0.3
 	github.com/getlantern/systray v1.2.1
@@ -34,13 +34,13 @@ require (
 	github.com/getlantern/ops v0.0.0-20190325191751-d70cb0d6f85f // indirect
 	github.com/go-sql-driver/mysql v1.6.0 // indirect
 	github.com/go-stack/stack v1.8.0 // indirect
-	github.com/goccy/go-json v0.7.4 // indirect
+	github.com/goccy/go-json v0.9.4 // indirect
 	github.com/gomodule/redigo v1.8.5 // indirect
 	github.com/gorilla/websocket v1.4.2 // indirect
 	github.com/grokify/html-strip-tags-go v0.0.1 // indirect
 	github.com/josephspurrier/goversioninfo v1.4.0 // indirect
-	github.com/kpango/fastime v1.0.17 // indirect
-	github.com/kpango/glg v1.6.4 // indirect
+	github.com/kpango/fastime v1.1.4 // indirect
+	github.com/kpango/glg v1.6.10 // indirect
 	github.com/mattn/go-colorable v0.1.8 // indirect
 	github.com/mattn/go-isatty v0.0.12 // indirect
 	github.com/mattn/go-runewidth v0.0.9 // indirect

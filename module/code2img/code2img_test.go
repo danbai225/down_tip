@@ -6,6 +6,7 @@ import (
 	"github.com/go-rod/rod/lib/launcher"
 	"github.com/go-rod/rod/lib/proto"
 	"net/url"
+	"os"
 	"testing"
 	"time"
 )
@@ -78,8 +79,9 @@ func main() {
 	err := rod.Try(func() {
 		page.Timeout(10 * time.Second).MustNavigate(urlstr)
 	})
-	page.MustElement("#export-container").Screenshot(proto.PageCaptureScreenshotFormatPng, 1)
+	screenshot, err := page.MustElement("#export-container").Screenshot(proto.PageCaptureScreenshotFormatPng, 1)
 	if err != nil {
 		logs.Err(err)
 	}
+	os.WriteFile("test.png", screenshot, os.ModePerm)
 }

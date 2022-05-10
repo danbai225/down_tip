@@ -39,7 +39,10 @@ func onReady(item *systray.MenuItem) {
 				if code != "" {
 					qrCode.Notify("解析成功")
 					if browser {
-						_ = open.Run(code)
+						err := open.Run(code)
+						if err != nil {
+							logs.Err(err)
+						}
 					} else {
 						clipboard.Write(clipboard.FmtText, []byte(code))
 					}
@@ -57,10 +60,12 @@ func exit() {
 func readTheQRCode(data []byte) string {
 	img, _, err := image.Decode(bytes.NewBuffer(data))
 	if err != nil {
+		logs.Err(err)
 		return ""
 	}
 	bmp, err := gozxing.NewBinaryBitmapFromImage(img)
 	if err != nil {
+		logs.Err(err)
 		return ""
 	}
 	qrReader := qrcode.NewQRCodeReader()
