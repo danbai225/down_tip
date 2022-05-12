@@ -17,6 +17,7 @@ import (
 )
 
 func main() {
+	logs.SetWriteLogs(logs.ERR | logs.INFO | logs.STD)
 	go func() {
 		http.ListenAndServe(":7779", nil)
 	}()
