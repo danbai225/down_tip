@@ -1,5 +1,5 @@
 <h1 align="center">
-  <img src="https://danbai-cloud.oss-cn-chengdu.aliyuncs.com/uploads%2F2021%2F09%2F10%2FIqxt9OW6_icon.png" width="224px"/><br/>
+  <img src="https://github.com/danbai225/tipbar/raw/main/core/ico.png" width="224px"/><br/>
   DownTip一个摸鱼小工具
 </h1>
 <p align="center">
