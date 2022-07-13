@@ -4,18 +4,16 @@ go 1.17
 
 require (
 	github.com/axgle/mahonia v0.0.0-20180208002826-3358181d7394
-	github.com/danbai225/go-logs v0.1.3
+	github.com/danbai225/go-logs v0.1.5
 	github.com/danbai225/tcpproxy v0.0.6
-	github.com/danbai225/tipbar v0.0.3
+	github.com/danbai225/tipbar v0.0.5
 	github.com/getlantern/systray v1.2.1
-	github.com/go-rod/rod v0.106.1
-	github.com/gogf/gf v1.16.7
+	github.com/gogf/gf v1.16.9
 	github.com/makiuchi-d/gozxing v0.1.1
-	github.com/miekg/dns v1.1.48
-	github.com/ncruces/zenity v0.8.2
+	github.com/miekg/dns v1.1.50
+	github.com/ncruces/zenity v0.8.9
 	github.com/robotn/gohook v0.40.0
 	github.com/skratchdot/open-golang v0.0.0-20200116055534-eef842397966
-	github.com/txthinking/socks5 v0.0.0-20220212043548-414499347d4a
 	golang.design/x/clipboard v0.6.2
 )
 
@@ -44,26 +42,19 @@ require (
 	github.com/mattn/go-colorable v0.1.8 // indirect
 	github.com/mattn/go-isatty v0.0.12 // indirect
 	github.com/mattn/go-runewidth v0.0.9 // indirect
-	github.com/ncruces/go-strftime v0.1.6 // indirect
 	github.com/olekukonko/tablewriter v0.0.5 // indirect
 	github.com/oxtoacart/bpool v0.0.0-20190530202638-03653db5a59c // indirect
-	github.com/patrickmn/go-cache v2.1.0+incompatible // indirect
 	github.com/randall77/makefat v0.0.0-20210315173500-7ddd0e42c844 // indirect
-	github.com/txthinking/runnergroup v0.0.0-20210608031112-152c7c4432bf // indirect
-	github.com/txthinking/x v0.0.0-20210326105829-476fab902fbe // indirect
 	github.com/vcaesar/keycode v0.10.0 // indirect
 	github.com/xtaci/smux v1.5.15 // indirect
-	github.com/ysmood/goob v0.4.0 // indirect
-	github.com/ysmood/gson v0.7.1 // indirect
-	github.com/ysmood/leakless v0.7.0 // indirect
 	go.opentelemetry.io/otel v1.0.0 // indirect
 	go.opentelemetry.io/otel/trace v1.0.0 // indirect
 	golang.org/x/exp v0.0.0-20190731235908-ec7cb31e5a56 // indirect
-	golang.org/x/image v0.0.0-20220321031419-a8550c1d254a // indirect
+	golang.org/x/image v0.0.0-20220617043117-41969df76e82 // indirect
 	golang.org/x/mobile v0.0.0-20210716004757-34ab1303b554 // indirect
 	golang.org/x/mod v0.4.2 // indirect
 	golang.org/x/net v0.0.0-20210726213435-c6fcb2dbf985 // indirect
-	golang.org/x/sys v0.0.0-20220405052023-b1e9470b6e64 // indirect
+	golang.org/x/sys v0.0.0-20220627191245-f75cf1eec38b // indirect
 	golang.org/x/text v0.3.7 // indirect
 	golang.org/x/tools v0.1.6-0.20210726203631-07bc1bf47fb2 // indirect
 	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1 // indirect
