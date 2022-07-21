@@ -1,3 +1,5 @@
+fyne.io/systray v1.10.0 h1:Yr1D9Lxeiw3+vSuZWPlaHC8BMjIHZXJKkek706AfYQk=
+fyne.io/systray v1.10.0/go.mod h1:oM2AQqGJ1AMo4nNqZFYU8xYygSBZkW2hmdJ7n4yjedE=
 github.com/BurntSushi/toml v0.3.1 h1:WXkYYl6Yr3qBf1K79EBnL4mak0OimBfB0XUf9Vl28OQ=
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
 github.com/BurntSushi/xgb v0.0.0-20160522181843-27f122750802/go.mod h1:IVnqGOEym/WlBOVXweHU+Q+/VP0lqqI8lqeDx9IjBqo=
@@ -13,8 +15,8 @@ github.com/danbai225/go-logs v0.1.5 h1:U1GmOVa1/0Dh6bmWWMo7FmoDgLa7HbuGbsA6GWBzA
 github.com/danbai225/go-logs v0.1.5/go.mod h1:l9qeVpPSPWFt0sWsWzc4mwwZisDgiIU0i2hmJSMFjLU=
 github.com/danbai225/tcpproxy v0.0.6 h1:dwz/a+I0lGH6eVXfCIsA3UG4VsccWLM2m3CMhiHxMQc=
 github.com/danbai225/tcpproxy v0.0.6/go.mod h1:4FJ0tqfb6MxzRwDAJf/o8vRylyrqkrqyM7ZURtZrEJQ=
-github.com/danbai225/tipbar v0.0.5 h1:KNZzulYNeACb3np80BQMKjtbd2bg2QCR70QCdEj8qXQ=
-github.com/danbai225/tipbar v0.0.5/go.mod h1:ET+PfmhBrMZxd6FdKcTnn/+ECQ28r3odbHWgJiFLsFQ=
+github.com/danbai225/tipbar v0.0.7 h1:mX6nF3F6Yr/AFIJGKxFWFfq/Rq81VUFV5bFyEYjem2Y=
+github.com/danbai225/tipbar v0.0.7/go.mod h1:r2Pf9/dqC0xiLBXrZHViaph37yrVtO4SS4dZEemvCDY=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
@@ -45,6 +47,8 @@ github.com/go-stack/stack v1.8.0/go.mod h1:v0f6uXyyMGvRgIKkXu+yp6POWl0qKG85gN/me
 github.com/goccy/go-json v0.7.4/go.mod h1:6MelG93GURQebXPDq3khkgXZkazVtN9CRI+MGFi0w8I=
 github.com/goccy/go-json v0.9.4 h1:L8MLKG2mvVXiQu07qB6hmfqeSYQdOnqPot2GhsIwIaI=
 github.com/goccy/go-json v0.9.4/go.mod h1:6MelG93GURQebXPDq3khkgXZkazVtN9CRI+MGFi0w8I=
+github.com/godbus/dbus/v5 v5.0.4 h1:9349emZab16e7zQvpmsbtjc18ykshndd8y2PG3sgJbA=
+github.com/godbus/dbus/v5 v5.0.4/go.mod h1:xhWf0FNVPg57R7Z0UbKHbJfkEywrmjJnf7w5xrFpKfA=
 github.com/gogf/gf v1.16.9 h1:Q803UmmRo59+Ws08sMVFOcd8oNpkSWL9vS33hlo/Cyk=
 github.com/gogf/gf v1.16.9/go.mod h1:8Q/kw05nlVRp+4vv7XASBsMe9L1tsVKiGoeP2AHnlkk=
 github.com/gomodule/redigo v1.8.5 h1:nRAxCa+SVsyjSBrtZmG/cqb6VbTmuRzpg/PoTFlpumc=
@@ -92,6 +96,8 @@ github.com/randall77/makefat v0.0.0-20210315173500-7ddd0e42c844 h1:GranzK4hv1/pq
 github.com/randall77/makefat v0.0.0-20210315173500-7ddd0e42c844/go.mod h1:T1TLSfyWVBRXVGzWd0o9BI4kfoO9InEgfQe4NV3mLz8=
 github.com/robotn/gohook v0.40.0 h1:qqjyRUIoRwwa9yv4xVeL8hX+vdhc9j56p9kF0D+hUuM=
 github.com/robotn/gohook v0.40.0/go.mod h1:wyGik0yb4iwCfJjDprtNkTyxkgQWuKoVPQ3hkz6+6js=
+github.com/shamsher31/goimgext v1.0.0 h1:wFKf9GeeE0Xr6UQtliaPgYYgTju2izobM7XpCEgUCC8=
+github.com/shamsher31/goimgext v1.0.0/go.mod h1:rYLKgXuTGBIaH49z+jUVSWz7gUWIZmqvYUsdvJbNNOc=
 github.com/sirupsen/logrus v1.8.1 h1:dJKuHgqk1NNQlqoA6BTlM1Wf9DOH3NBjQyu0h9+AZZE=
 github.com/sirupsen/logrus v1.8.1/go.mod h1:yWOB1SBYBC5VeMP7gHvWumXLIWorT60ONWic61uBYv0=
 github.com/skratchdot/open-golang v0.0.0-20200116055534-eef842397966 h1:JIAuq3EEf9cgbU6AtGPK4CTG3Zf6CKMNqf0MHTggAUA=
@@ -104,6 +110,8 @@ github.com/stretchr/testify v1.5.1/go.mod h1:5W2xD1RspED5o8YsWQXVCued0rvSQ+mT+I5
 github.com/stretchr/testify v1.6.1/go.mod h1:6Fq8oRcR53rry900zMqJjRRixrwX3KX962/h/Wwjteg=
 github.com/stretchr/testify v1.7.0 h1:nwc3DEeHmmLAfoZucVR881uASk0Mfjw8xYJ99tb5CcY=
 github.com/stretchr/testify v1.7.0/go.mod h1:6Fq8oRcR53rry900zMqJjRRixrwX3KX962/h/Wwjteg=
+github.com/tevino/abool v1.2.0 h1:heAkClL8H6w+mK5md9dzsuohKeXHUpY7Vw0ZCKW+huA=
+github.com/tevino/abool v1.2.0/go.mod h1:qc66Pna1RiIsPa7O4Egxxs9OqkuxDX55zznh9K07Tzg=
 github.com/vcaesar/keycode v0.10.0 h1:Qx5QE8ZXHyRyjoA2QOxBp25OKMKB+zxMVqm0FWGV0d4=
 github.com/vcaesar/keycode v0.10.0/go.mod h1:JNlY7xbKsh+LAGfY2j4M3znVrGEm5W1R8s/Uv6BJcfQ=
 github.com/vcaesar/tt v0.20.0 h1:9t2Ycb9RNHcP0WgQgIaRKJBB+FrRdejuaL6uWIHuoBA=

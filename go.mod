@@ -6,18 +6,21 @@ require (
 	github.com/axgle/mahonia v0.0.0-20180208002826-3358181d7394
 	github.com/danbai225/go-logs v0.1.5
 	github.com/danbai225/tcpproxy v0.0.6
-	github.com/danbai225/tipbar v0.0.5
+	github.com/danbai225/tipbar v0.0.7
 	github.com/getlantern/systray v1.2.1
 	github.com/gogf/gf v1.16.9
 	github.com/makiuchi-d/gozxing v0.1.1
 	github.com/miekg/dns v1.1.50
 	github.com/ncruces/zenity v0.8.9
 	github.com/robotn/gohook v0.40.0
+	github.com/shamsher31/goimgext v1.0.0
 	github.com/skratchdot/open-golang v0.0.0-20200116055534-eef842397966
 	golang.design/x/clipboard v0.6.2
+	golang.org/x/image v0.0.0-20220617043117-41969df76e82
 )
 
 require (
+	fyne.io/systray v1.10.0 // indirect
 	github.com/BurntSushi/toml v0.3.1 // indirect
 	github.com/akavel/rsrc v0.10.2 // indirect
 	github.com/clbanning/mxj v1.8.5-0.20200714211355-ff02cfb8ea28 // indirect
@@ -33,6 +36,7 @@ require (
 	github.com/go-sql-driver/mysql v1.6.0 // indirect
 	github.com/go-stack/stack v1.8.0 // indirect
 	github.com/goccy/go-json v0.9.4 // indirect
+	github.com/godbus/dbus/v5 v5.0.4 // indirect
 	github.com/gomodule/redigo v1.8.5 // indirect
 	github.com/gorilla/websocket v1.4.2 // indirect
 	github.com/grokify/html-strip-tags-go v0.0.1 // indirect
@@ -45,12 +49,12 @@ require (
 	github.com/olekukonko/tablewriter v0.0.5 // indirect
 	github.com/oxtoacart/bpool v0.0.0-20190530202638-03653db5a59c // indirect
 	github.com/randall77/makefat v0.0.0-20210315173500-7ddd0e42c844 // indirect
+	github.com/tevino/abool v1.2.0 // indirect
 	github.com/vcaesar/keycode v0.10.0 // indirect
 	github.com/xtaci/smux v1.5.15 // indirect
 	go.opentelemetry.io/otel v1.0.0 // indirect
 	go.opentelemetry.io/otel/trace v1.0.0 // indirect
 	golang.org/x/exp v0.0.0-20190731235908-ec7cb31e5a56 // indirect
-	golang.org/x/image v0.0.0-20220617043117-41969df76e82 // indirect
 	golang.org/x/mobile v0.0.0-20210716004757-34ab1303b554 // indirect
 	golang.org/x/mod v0.4.2 // indirect
 	golang.org/x/net v0.0.0-20210726213435-c6fcb2dbf985 // indirect

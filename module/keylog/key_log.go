@@ -2,9 +2,9 @@ package keylog
 
 import (
 	_ "embed"
+	"fyne.io/systray"
 	logs "github.com/danbai225/go-logs"
 	"github.com/danbai225/tipbar/core"
-	"github.com/getlantern/systray"
 	"github.com/gogf/gf/frame/g"
 	"github.com/gogf/gf/net/ghttp"
 	hook "github.com/robotn/gohook"

@@ -1,10 +1,10 @@
 package socks5proxy
 
 import (
+	"fyne.io/systray"
 	logs "github.com/danbai225/go-logs"
 	"github.com/danbai225/tcpproxy"
 	"github.com/danbai225/tipbar/core"
-	"github.com/getlantern/systray"
 	"github.com/gogf/gf/container/gset"
 	"github.com/gogf/gf/net/ghttp"
 	"github.com/miekg/dns"

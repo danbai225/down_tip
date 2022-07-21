@@ -9,16 +9,11 @@ import (
 	"down_tip/module/weather"
 	logs "github.com/danbai225/go-logs"
 	"github.com/danbai225/tipbar/core"
-	"net/http"
-	_ "net/http/pprof"
 	"os"
 )
 
 func main() {
 	logs.SetWriteLogs(logs.ERR | logs.INFO)
-	go func() {
-		http.ListenAndServe(":7779", nil)
-	}()
 	var a *core.App
 	var err error
 	if len(os.Args) > 1 {
