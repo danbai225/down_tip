@@ -74,7 +74,6 @@ func onReady(item *systray.MenuItem) {
 }
 
 var subItem = map[string]*systray.MenuItem{}
-var alerts = make([]*systray.MenuItem, 0)
 var alertsMsgMap = map[string]struct{}{}
 
 func weatherUpdate(item *systray.MenuItem) {
@@ -110,15 +109,9 @@ func weatherUpdate(item *systray.MenuItem) {
 		subItem["alert"].Hide()
 	} else {
 		subItem["alert"].Show()
-		if len(alerts) > 0 {
-			for _, menuItem := range alerts {
-				menuItem.Hide()
-				menuItem.Disable()
-			}
-		}
 		for _, s := range alert.Content {
-			subItem["alert"].AddSubMenuItem(s.Title, s.Description)
 			if _, has := alertsMsgMap[s.AlertID]; !has {
+				subItem["alert"].AddSubMenuItem(s.Title, s.Description)
 				weather.Notify(s.Description)
 				alertsMsgMap[s.AlertID] = struct{}{}
 			}
