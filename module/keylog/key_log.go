@@ -15,7 +15,7 @@ import (
 var keyLog *core.Module
 
 func ExportModule() *core.Module {
-	keyLog = core.NewModule("key_log", "按键日志", "记录按键次数", onReady, exit, router)
+	keyLog = core.NewModule("key_log", "按键日志", "记录按键次数", onReady, nil, router)
 	return keyLog
 }
 

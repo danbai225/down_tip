@@ -10,7 +10,7 @@ import (
 var down *core.Module
 
 func ExportModule() *core.Module {
-	down = core.NewModule("down", "down", "计算时间", onReady, exit, nil)
+	down = core.NewModule("down", "down", "计算时间", onReady, nil, nil)
 	return down
 }
 func onReady(item *systray.MenuItem) {
@@ -59,7 +59,4 @@ func onReady(item *systray.MenuItem) {
 			todaySTimeItem.SetTitle(addStartingTimeToday(-1 * time.Minute))
 		}
 	}
-}
-func exit() {
-
 }

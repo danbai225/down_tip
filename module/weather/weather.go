@@ -26,7 +26,7 @@ var config = weatherConfig{}
 var restLa *systray.MenuItem
 
 func ExportModule() *core.Module {
-	weather = core.NewModule("weather", "天气", "天气", onReady, exit, router)
+	weather = core.NewModule("weather", "天气", "天气", onReady, nil, router)
 	return weather
 }
 func router(group *ghttp.RouterGroup) {
@@ -150,9 +150,6 @@ func weatherUpdate(item *systray.MenuItem) {
 	} else {
 		subItem["hourly"].Hide()
 	}
-}
-func exit() {
-
 }
 
 //https://open.caiyunapp.com/%E5%BD%A9%E4%BA%91%E5%A4%A9%E6%B0%94_API_%E4%B8%80%E8%A7%88%E8%A1%A8

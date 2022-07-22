@@ -22,7 +22,7 @@ import (
 var qrCode *core.Module
 
 func ExportModule() *core.Module {
-	qrCode = core.NewModule("qrCode", "二维码识别", "识别剪贴板二维码", onReady, exit, nil)
+	qrCode = core.NewModule("qrCode", "二维码识别", "识别剪贴板二维码", onReady, nil, nil)
 	return qrCode
 }
 func onReady(item *systray.MenuItem) {
@@ -60,8 +60,6 @@ func onReady(item *systray.MenuItem) {
 			}
 		}
 	}
-}
-func exit() {
 }
 
 func getImgType(buff []byte) string {

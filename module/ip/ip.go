@@ -20,7 +20,7 @@ var pItem, vItem, addItem *systray.MenuItem
 var vip = ""
 
 func ExportModule() *core.Module {
-	ip = core.NewModule("ip", "IP信息", "ip", onReady, exit, nil)
+	ip = core.NewModule("ip", "IP信息", "ip", onReady, nil, nil)
 	return ip
 }
 
@@ -72,9 +72,6 @@ func update() {
 	info = getIpInfo("")
 	pItem.SetTitle(fmt.Sprintf("ip:%s", info.IP))
 	addItem.SetTitle(fmt.Sprintf("地址信息:%s", info.Addr))
-}
-func exit() {
-
 }
 
 type ipInfo struct {

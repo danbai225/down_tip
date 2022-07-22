@@ -6,7 +6,6 @@ import (
 	"github.com/danbai225/tcpproxy"
 	"github.com/danbai225/tipbar/core"
 	"github.com/gogf/gf/container/gset"
-	"github.com/gogf/gf/net/ghttp"
 	"github.com/miekg/dns"
 	"github.com/ncruces/zenity"
 	"regexp"
@@ -27,13 +26,8 @@ type socks5Config struct {
 var config = socks5Config{}
 
 func ExportModule() *core.Module {
-	socks5 = core.NewModule("socks5proxy", "socks5proxy", "代理模块", onReady, exit, router)
+	socks5 = core.NewModule("socks5proxy", "socks5proxy", "代理模块", onReady, nil, nil)
 	return socks5
-}
-func router(group *ghttp.RouterGroup) {
-	group.GET("/", func(r *ghttp.Request) {
-
-	})
 }
 
 var connflag = false
@@ -104,9 +98,7 @@ func conn() {
 	}()
 	connflag = true
 }
-func exit() {
 
-}
 func getIP(domain string, dnsList []string) []string {
 	set := gset.New(true)
 	var dst []string

@@ -28,6 +28,12 @@
     "weather": {
       "enable": true,
       "config": null
+    },
+    "self_start": {
+      "enable": true,
+      "config": {
+        "enable": false
+      }
     }
   },
   "http_port": 7989,
