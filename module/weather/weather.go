@@ -19,9 +19,11 @@ var weather *core.Module
 
 type weatherConfig struct {
 	LatitudeAndLongitude string
+	AddStr               string
 }
 
 var config = weatherConfig{}
+var restLa *systray.MenuItem
 
 func ExportModule() *core.Module {
 	weather = core.NewModule("weather", "天气", "天气", onReady, exit, router)
@@ -29,14 +31,17 @@ func ExportModule() *core.Module {
 }
 func router(group *ghttp.RouterGroup) {
 	group.GET("/", func(r *ghttp.Request) {
+		logs.Info(r.Request.RequestURI)
 		query := r.GetQueryString("latng")
 		if query != "" {
 			split := strings.Split(query, ",")
 			config.LatitudeAndLongitude = split[1] + "," + split[0]
+			config.AddStr = r.GetQueryString("addr")
 			r.Response.WriteJson(g.Map{
 				"msg":  "获取成功",
 				"code": 0,
 			})
+			restLa.SetTitle(fmt.Sprintf("当前位置:%s （点击重置）", config.AddStr))
 			weather.SaveConfig(config)
 		} else {
 			r.Response.WriteJson(g.Map{
@@ -51,6 +56,8 @@ func onReady(item *systray.MenuItem) {
 	if config.LatitudeAndLongitude == "" {
 		item.SetTitle("点击获取天气信息")
 	}
+	restLa = item.AddSubMenuItem(fmt.Sprintf("当前位置:%s （点击重置）", config.AddStr), "点击重置地理位置")
+
 	go func() {
 		for {
 			if config.LatitudeAndLongitude != "" {
@@ -59,16 +66,20 @@ func onReady(item *systray.MenuItem) {
 			time.Sleep(time.Minute * 5)
 		}
 	}()
+	updateL := func() {
+		sprintf := fmt.Sprintf(`https://mapapi.qq.com/web/mapComponents/locationPicker/v/index.html?&type=0&backurl=%s&key=WWBBZ-FMDY6-FNDSG-M3IP4-2QLEF-SQBJH&referer=`, weather.GetRootUrl()) + `%E5%B7%A5%E5%85%B7%E9%9B%86`
+		open.Run(sprintf)
+	}
 	for {
 		select {
 		case <-item.ClickedCh:
 			if config.LatitudeAndLongitude == "" {
 				weather.Notify("未设置地理位置请先设置")
-				sprintf := fmt.Sprintf(`https://mapapi.qq.com/web/mapComponents/locationPicker/v/index.html?&type=0&backurl=%s&key=WWBBZ-FMDY6-FNDSG-M3IP4-2QLEF-SQBJH&referer=`, weather.GetRootUrl()) + `%E5%B7%A5%E5%85%B7%E9%9B%86`
-				open.Run(sprintf)
-			} else {
-				weatherUpdate(item)
+				updateL()
 			}
+			weatherUpdate(item)
+		case <-restLa.ClickedCh:
+			updateL()
 		}
 	}
 }
@@ -190,75 +201,6 @@ func getSkyString(code string) string {
 	}
 	return code
 }
-
-//// Realtime 实时
-//type Realtime struct {
-//	Status     string    `json:"status"`
-//	APIVersion string    `json:"api_version"`
-//	APIStatus  string    `json:"api_status"`
-//	Lang       string    `json:"lang"`
-//	Unit       string    `json:"unit"`
-//	Tzshift    float64       `json:"tzshift"`
-//	Timezone   string    `json:"timezone"`
-//	ServerTime float64       `json:"server_time"`
-//	Location   []float64 `json:"location"`
-//	Result     struct {
-//		Realtime struct {
-//			Status      string  `json:"status"`
-//			Temperature float64 `json:"temperature"` //温度
-//			Humidity    float64 `json:"humidity"` //相对湿度
-//			Cloudrate   float64     `json:"cloudrate"` //云量
-//			Skycon      string  `json:"skycon"` //天气状况 //https://open.caiyunapp.com/%E5%AE%9E%E5%86%B5%E5%A4%A9%E6%B0%94%E6%8E%A5%E5%8F%A3/v2.5#.E5.A4.A9.E6.B0.94.E7.8E.B0.E8.B1.A1.E4.BB.A3.E7.A0.81
-//			Visibility  float64 `json:"visibility"` //能见度
-//			Dswrf       float64 `json:"dswrf"` //短波辐射
-//			Wind        struct {
-//				Speed     float64 `json:"speed"` //风速
-//				Direction float64     `json:"direction"` //风向
-//			} `json:"wind"`
-//			Pressure            float64 `json:"pressure"` //气压
-//			ApparentTemperature float64 `json:"apparent_temperature"` //体感温度
-//			Precipitation       struct {
-//				Local struct {
-//					Status     string `json:"status"`
-//					Datasource string `json:"datasource"`
-//					Intensity  float64    `json:"intensity"`
-//				} `json:"local"`
-//				Nearest struct {
-//					Status    string `json:"status"`
-//					Distance  float64    `json:"distance"` //最近降水距离
-//					Intensity float64    `json:"intensity"` //本地降水强度
-//				} `json:"nearest"`
-//			} `json:"precipitation"`
-//			AirQuality struct {
-//				Pm25 float64 `json:"pm25"` //PM25浓度
-//				Pm10 float64 `json:"pm10"` //PM10浓度
-//				O3   float64 `json:"o3"` //臭氧浓度
-//				So2  float64 `json:"so2"` //二氧化氮浓度
-//				No2  float64 `json:"no2"` //二氧化硫浓度
-//				Co   float64 `json:"co"` //一氧化碳浓度
-//				Aqi  struct {
-//					Chn float64 `json:"chn"`
-//					Usa float64 `json:"usa"`
-//				} `json:"aqi"`
-//				Description struct {
-//					Usa string `json:"usa"`
-//					Chn string `json:"chn"`
-//				} `json:"description"`
-//			} `json:"air_quality"`
-//			LifeIndex struct {
-//				Ultraviolet struct {
-//					Index float64    `json:"index"` //紫外线指数
-//					Desc  string `json:"desc"`
-//				} `json:"ultraviolet"`
-//				Comfort struct {
-//					Index float64    `json:"index"` //舒适度指数
-//					Desc  string `json:"desc"`
-//				} `json:"comfort"`
-//			} `json:"life_index"`
-//		} `json:"realtime"`
-//		Primary float64 `json:"primary"`
-//	} `json:"result"`
-//}
 
 type Weather struct {
 	Status     string    `json:"status"`
