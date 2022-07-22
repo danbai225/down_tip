@@ -5,7 +5,7 @@ go 1.17
 require (
 	fyne.io/systray v1.10.0
 	github.com/axgle/mahonia v0.0.0-20180208002826-3358181d7394
-	github.com/danbai225/go-logs v0.1.5
+	github.com/danbai225/go-logs v0.1.6
 	github.com/danbai225/tcpproxy v0.0.6
 	github.com/danbai225/tipbar v0.0.8
 	github.com/gogf/gf v1.16.9

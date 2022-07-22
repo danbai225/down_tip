@@ -2,7 +2,7 @@
 *.log
 *.exe
 /.idea
-down_tip
+DownTip.app/Contents/MacOS/down_tip
 logs
 dev_config.json
 DownTip.app
