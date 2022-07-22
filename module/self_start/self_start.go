@@ -59,12 +59,22 @@ const (
 <dict>
 	<key>Label</key>
 	<string>cn.p00q.tipbar</string>
-	<key>Program</key>
-    <string>/Applications/DownTip.app/Contents/MacOS/down_tip</string>
+	<key>ProgramArguments</key>
+        <array>
+        	<string>/Applications/DownTip.app/Contents/MacOS/down_tip</string>
+        </array>
 	<key>RunAtLoad</key>
-	<false/>
+	<true/>
+	<key>WorkingDirectory</key>
+	<string>/Applications/DownTip.app/Contents/MacOS</string>
+	<key>StandardErrorPath</key>
+	<string>/tmp/down_tip.err</string>
+	<key>StandardOutPath</key>
+	<string>/tmp/down_tip.out</string>
 </dict>
 </plist>
+
+
 `
 	winBat = `start %s`
 )
