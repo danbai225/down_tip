@@ -27,7 +27,7 @@ type socks5Config struct {
 var config = socks5Config{}
 
 func ExportModule() *core.Module {
-	socks5 = core.NewModule("socks5proxy", "socks5proxy", "socks5proxy", onReady, exit, router)
+	socks5 = core.NewModule("socks5proxy", "socks5proxy", "代理模块", onReady, exit, router)
 	return socks5
 }
 func router(group *ghttp.RouterGroup) {

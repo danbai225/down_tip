@@ -9,6 +9,7 @@ import (
 	"down_tip/module/weather"
 	logs "github.com/danbai225/go-logs"
 	"github.com/danbai225/tipbar/core"
+	"github.com/gogf/gf/net/ghttp"
 	"os"
 )
 
@@ -16,11 +17,13 @@ func main() {
 	logs.SetWriteLogs(logs.ERR | logs.INFO)
 	var a *core.App
 	var err error
+	cf := ""
 	if len(os.Args) > 1 {
-		a, err = core.NewApp(os.Args[1])
-	} else {
-		a, err = core.NewApp()
+		cf = os.Args[1]
 	}
+	a, err = core.NewApp(func(r *ghttp.Request) {
+		r.Response.RedirectTo("https://github.com/danbai225/down_tip", 302)
+	}, cf, "DownTip", "v1.0.1", nil)
 	if err != nil {
 		logs.Err(err)
 		return
