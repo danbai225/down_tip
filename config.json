@@ -34,6 +34,14 @@
       "config": {
         "enable": false
       }
+    },
+    "wallpaper": {
+      "enable": true,
+      "config": {
+        "Resolution": false,
+        "Auto": true,
+        "Interval": 1
+      }
     }
   },
   "http_port": 7989,

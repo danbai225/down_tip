@@ -7,6 +7,7 @@ import (
 	"down_tip/module/qrcode"
 	"down_tip/module/self_start"
 	"down_tip/module/socks5proxy"
+	"down_tip/module/wallpaper"
 	"down_tip/module/weather"
 	logs "github.com/danbai225/go-logs"
 	"github.com/danbai225/tipbar/core"
@@ -38,6 +39,7 @@ func main() {
 		weather.ExportModule(),
 		socks5proxy.ExportModule(),
 		self_start.ExportModule(),
+		wallpaper.ExportModule(),
 	)
 	err = a.Run()
 	if err != nil {
