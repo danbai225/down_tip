@@ -21,6 +21,8 @@ type wallpaperConfig struct {
 	Resolution string //分辨率
 	Auto       bool   //自动
 	Interval   int    //间隔，分钟
+	Categories string //类别
+	Q          string //关键字
 }
 
 var config = wallpaperConfig{}
@@ -30,15 +32,42 @@ func ExportModule() *core.Module {
 	wallpaper = core.NewModule("wallpaper", "壁纸", "wallpaper", onReady, nil, nil)
 	return wallpaper
 }
-
+func getCategoriesName(c string) string {
+	switch c {
+	case "100":
+		return "一般"
+	case "010":
+		return "动漫"
+	case "001":
+		return "美图"
+	}
+	return ""
+}
 func onReady(item *systray.MenuItem) {
 	wallpaper.UnmarshalConfig(&config)
 	if config.Resolution == "" {
 		config.Resolution = "16:9"
 	}
+	if config.Categories == "" {
+		config.Categories = "100"
+	}
 	change := item.AddSubMenuItem("更换", "")
 	resolutionRatio := item.AddSubMenuItem(fmt.Sprintf("设置分辨率/比例 当前:%s", config.Resolution), "")
-	auto := item.AddSubMenuItemCheckbox("自动更换", "", config.Auto)
+	autoStr := "自动更换"
+	if config.Auto {
+		autoStr = fmt.Sprintf("自动更换(%d分钟)", config.Interval)
+	}
+	auto := item.AddSubMenuItemCheckbox(autoStr, "", config.Auto)
+	categoriesItem := item.AddSubMenuItem(fmt.Sprintf("类型(%s)", getCategoriesName(config.Categories)), "")
+	categories1 := categoriesItem.AddSubMenuItem("一般", "")
+	categories2 := categoriesItem.AddSubMenuItem("动漫", "")
+	categories3 := categoriesItem.AddSubMenuItem("美图", "")
+	qitemStr := "关键字"
+	if config.Q != "" {
+		qitemStr = fmt.Sprintf("关键字(%s)", config.Q)
+	}
+	qItem := item.AddSubMenuItem(qitemStr, "")
+	//100/101/111*
 	updateTimer()
 	go timeOut()
 	for {
@@ -55,6 +84,7 @@ func onReady(item *systray.MenuItem) {
 		case <-auto.ClickedCh:
 			if auto.Checked() {
 				auto.Uncheck()
+				auto.SetTitle("自动更换")
 			} else {
 				auto.Check()
 				entry, err := zenity.Entry("请输入更换间隔分钟数")
@@ -72,6 +102,25 @@ func onReady(item *systray.MenuItem) {
 			config.Auto = auto.Checked()
 			wallpaper.SaveConfig(config)
 			updateTimer()
+		case <-categories1.ClickedCh:
+			config.Categories = "100"
+			categoriesItem.SetTitle(fmt.Sprintf("类型(%s)", getCategoriesName(config.Categories)))
+			wallpaper.SaveConfig(config)
+		case <-categories2.ClickedCh:
+			config.Categories = "010"
+			categoriesItem.SetTitle(fmt.Sprintf("类型(%s)", getCategoriesName(config.Categories)))
+			wallpaper.SaveConfig(config)
+		case <-categories3.ClickedCh:
+			config.Categories = "001"
+			categoriesItem.SetTitle(fmt.Sprintf("类型(%s)", getCategoriesName(config.Categories)))
+			wallpaper.SaveConfig(config)
+		case <-qItem.ClickedCh:
+			entry, err := zenity.Entry("请输入关键字(英文)：")
+			if err == nil {
+				config.Q = entry
+				qItem.SetTitle(fmt.Sprintf("关键字(%s)", entry))
+			}
+			wallpaper.SaveConfig(config)
 		}
 	}
 }
@@ -91,7 +140,8 @@ func timeOut() {
 	}
 }
 func changeWallpaper() {
-	all, err := httpGet(fmt.Sprintf("https://wallhaven.cc/api/v1/search?ratios=%s&sorting=random", config.Resolution))
+	url := fmt.Sprintf("https://wallhaven.cc/api/v1/search?ratios=%s&sorting=random&categories=%s&q=%s", config.Resolution, config.Categories, config.Q)
+	all, err := httpGet(url)
 	rdata := Rdata{}
 	err = json.Unmarshal(all, &rdata)
 	if err != nil {
