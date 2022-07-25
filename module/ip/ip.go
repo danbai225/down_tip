@@ -16,7 +16,7 @@ import (
 
 var ip *core.Module
 var info ipInfo
-var pItem, vItem, addItem *systray.MenuItem
+var pItem, vItem, wItem, addItem *systray.MenuItem
 var vip = ""
 
 func ExportModule() *core.Module {
@@ -26,6 +26,7 @@ func ExportModule() *core.Module {
 
 func onReady(item *systray.MenuItem) {
 	pItem = item.AddSubMenuItem("公网:", "公网地址")
+	wItem = item.AddSubMenuItem("外网:", "外网地址")
 	vItem = item.AddSubMenuItem("内网:", "内网地址")
 	addItem = item.AddSubMenuItem("地址信息:", "地址信息")
 	s, _ := LocalIPv4s()
@@ -41,6 +42,8 @@ func onReady(item *systray.MenuItem) {
 	update()
 	for {
 		select {
+		case <-wItem.ClickedCh:
+
 		case <-item.ClickedCh:
 			update()
 		case <-pItem.ClickedCh:
@@ -72,6 +75,11 @@ func update() {
 	info = getIpInfo("")
 	pItem.SetTitle(fmt.Sprintf("ip:%s", info.IP))
 	addItem.SetTitle(fmt.Sprintf("地址信息:%s", info.Addr))
+	get, err := http.Get("https://ip.gs")
+	if err == nil {
+		all, _ := ioutil.ReadAll(get.Body)
+		wItem.SetTitle(fmt.Sprintf("外网:%s", string(all)))
+	}
 }
 
 type ipInfo struct {

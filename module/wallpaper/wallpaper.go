@@ -10,6 +10,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"os"
+	"path/filepath"
 	"strconv"
 	"strings"
 	"time"
@@ -152,19 +153,23 @@ func changeWallpaper() {
 		return
 	}
 	path := rdata.Data[0].Path
-	suffix := strings.Split(path, ".")[1]
+	split := strings.Split(path, ".")
+	suffix := split[len(split)-1]
 	data, err := httpGet(path)
 	if err != nil {
 		logs.Err(err)
 		return
 	}
-	filename := fmt.Sprintf("%s/%s.%s", os.TempDir(), rdata.Data[0].Id, suffix)
+	_ = os.MkdirAll("./wallpaper", os.ModePerm)
+
+	filename := fmt.Sprintf("./wallpaper/%s.%s", rdata.Data[0].Id, suffix)
 	err = ioutil.WriteFile(filename, data, os.ModePerm)
 	if err != nil {
 		logs.Err(err)
 		return
 	}
-	err = SetWallpaper(filename)
+	abs, _ := filepath.Abs(filename)
+	err = SetWallpaper(abs)
 	if err != nil {
 		logs.Err(err)
 		return
