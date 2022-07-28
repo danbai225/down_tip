@@ -6,7 +6,7 @@ require (
 	fyne.io/systray v1.10.0
 	github.com/axgle/mahonia v0.0.0-20180208002826-3358181d7394
 	github.com/danbai225/go-logs v0.1.6
-	github.com/danbai225/tcpproxy v0.0.6
+	github.com/danbai225/tcpproxy v0.1.0
 	github.com/danbai225/tipbar v0.0.8
 	github.com/gogf/gf v1.16.9
 	github.com/makiuchi-d/gozxing v0.1.1
@@ -42,7 +42,7 @@ require (
 	github.com/randall77/makefat v0.0.0-20210315173500-7ddd0e42c844 // indirect
 	github.com/tevino/abool v1.2.0 // indirect
 	github.com/vcaesar/keycode v0.10.0 // indirect
-	github.com/xtaci/smux v1.5.15 // indirect
+	github.com/xtaci/smux v1.5.16 // indirect
 	go.opentelemetry.io/otel v1.0.0 // indirect
 	go.opentelemetry.io/otel/trace v1.0.0 // indirect
 	golang.org/x/exp v0.0.0-20190731235908-ec7cb31e5a56 // indirect

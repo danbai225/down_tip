@@ -9,6 +9,7 @@ import (
 	"io/ioutil"
 	"os"
 	"os/user"
+	"path/filepath"
 	"runtime"
 )
 
@@ -92,8 +93,9 @@ func start(on bool) error {
 		content = macListFile
 	//case "linux":
 	case "windows":
-		path = fmt.Sprintf("C:\\Users\\%s\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Startup", current.Username)
-		content = fmt.Sprintf(winBat, os.Args[0])
+		path = fmt.Sprintf("%s\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\down_tip.bat", current.HomeDir)
+		abs, _ := filepath.Abs(os.Args[0])
+		content = fmt.Sprintf(winBat, abs)
 	default:
 		return errors.New("不支持的系统")
 	}
