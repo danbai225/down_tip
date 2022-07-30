@@ -47,7 +47,7 @@ func getCategoriesName(c string) string {
 func onReady(item *systray.MenuItem) {
 	wallpaper.UnmarshalConfig(&config)
 	if config.Resolution == "" {
-		config.Resolution = "16:9"
+		config.Resolution = "16x9"
 	}
 	if config.Categories == "" {
 		config.Categories = "100"
@@ -76,7 +76,7 @@ func onReady(item *systray.MenuItem) {
 		case <-change.ClickedCh:
 			changeWallpaper()
 		case <-resolutionRatio.ClickedCh:
-			entry, err := zenity.Entry("请输入壁纸分辨率例如 1920x1080或者比例 16:9")
+			entry, err := zenity.Entry("请输入壁纸分辨率例如 1920x1080或者比例 16x9")
 			if err == nil {
 				config.Resolution = entry
 				resolutionRatio.SetTitle(fmt.Sprintf("设置分辨率/比例 当前:%s", config.Resolution))
