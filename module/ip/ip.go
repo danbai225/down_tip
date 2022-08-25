@@ -1,6 +1,7 @@
 package ip
 
 import (
+	"down_tip/module/socks5proxy"
 	"encoding/json"
 	"fmt"
 	"fyne.io/systray"
@@ -20,25 +21,16 @@ var pItem, vItem, wItem, addItem *systray.MenuItem
 var vip = ""
 
 func ExportModule() *core.Module {
-	ip = core.NewModule("ip", "IP信息", "ip", onReady, nil, nil)
+	ip = core.NewModule("ip", "IP信息", "", onReady, nil, nil)
 	return ip
 }
 
 func onReady(item *systray.MenuItem) {
-	pItem = item.AddSubMenuItem("公网:", "公网地址")
-	wItem = item.AddSubMenuItem("外网:", "外网地址")
-	vItem = item.AddSubMenuItem("内网:", "内网地址")
-	addItem = item.AddSubMenuItem("地址信息:", "地址信息")
-	s, _ := LocalIPv4s()
-	for i, s2 := range s {
-		if i == 0 {
-			vip = s2
-			vItem.SetTitle(fmt.Sprintf("内网:%s", s2))
-		}
-		ii := vItem.AddSubMenuItem(s2, "")
-		go cpItem(s2, ii)
-	}
-	qItem := item.AddSubMenuItem("ip查询", "ip查询")
+	pItem = item.AddSubMenuItem("公网:", "")
+	wItem = item.AddSubMenuItem("外网:", "")
+	vItem = item.AddSubMenuItem("内网:", "")
+	addItem = item.AddSubMenuItem("地址信息:", "")
+	qItem := item.AddSubMenuItem("ip查询", "点击查询ip信息")
 	update()
 	for {
 		select {
@@ -53,7 +45,7 @@ func onReady(item *systray.MenuItem) {
 		case <-addItem.ClickedCh:
 			clipboard.Write(clipboard.FmtText, []byte(info.Addr))
 		case <-qItem.ClickedCh:
-			entry, err := zenity.Entry("请输入需要查询的ip")
+			entry, err := zenity.Entry("请输入需要查询的ip/域名")
 			if err != nil {
 				continue
 			}
@@ -72,6 +64,15 @@ func cpItem(val string, item *systray.MenuItem) {
 	}
 }
 func update() {
+	s, _ := LocalIPv4s()
+	for i, s2 := range s {
+		if i == 0 {
+			vip = s2
+			vItem.SetTitle(fmt.Sprintf("内网:%s", s2))
+		}
+		ii := vItem.AddSubMenuItem(s2, "")
+		go cpItem(s2, ii)
+	}
 	info = getIpInfo("")
 	pItem.SetTitle(fmt.Sprintf("ip:%s", info.IP))
 	addItem.SetTitle(fmt.Sprintf("地址信息:%s", info.Addr))
@@ -97,6 +98,12 @@ type ipInfo struct {
 
 func getIpInfo(ip string) ipInfo {
 	i := ipInfo{}
+	if socks5proxy.IsDomain(ip) {
+		ips := socks5proxy.GetIP(ip, []string{"223.5.5.5", "114.114.114.114", "117.50.10.10", "119.29.29.29"})
+		if len(ips) > 0 {
+			ip = ips[0]
+		}
+	}
 	get, err := http.Get("https://whois.pconline.com.cn/ipJson.jsp?json=true&ip=" + ip)
 	if err != nil {
 		logs.Err(err)

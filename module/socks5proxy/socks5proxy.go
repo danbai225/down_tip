@@ -81,8 +81,8 @@ func conn() {
 		defer func() {
 			rootItem.SetTitle("点击运行客户端")
 		}()
-		if isDomain(config.Host) {
-			ips := getIP(config.Host, []string{"223.5.5.5", "114.114.114.114", "8.8.8.8", "1.1.1.1"})
+		if IsDomain(config.Host) {
+			ips := GetIP(config.Host, []string{"223.5.5.5", "114.114.114.114", "117.50.10.10", "119.29.29.29"})
 			for _, ip := range ips {
 				client = tcpproxy.Client{}.New(config.Password, ip+":"+config.Port, ":"+config.LPort)
 				err := client.Start()
@@ -99,7 +99,7 @@ func conn() {
 	connflag = true
 }
 
-func getIP(domain string, dnsList []string) []string {
+func GetIP(domain string, dnsList []string) []string {
 	set := gset.New(true)
 	var dst []string
 	group := &sync.WaitGroup{}
@@ -132,7 +132,7 @@ func getIP(domain string, dnsList []string) []string {
 	}
 	return dst
 }
-func isDomain(text string) bool {
+func IsDomain(text string) bool {
 	compile := regexp.MustCompile(".*[a-zA-Z].*")
 	return compile.MatchString(text)
 }
