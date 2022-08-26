@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"fyne.io/systray"
 	"github.com/axgle/mahonia"
+	emoji "github.com/danbai225/flag_emoji"
 	logs "github.com/danbai225/go-logs"
 	"github.com/danbai225/tipbar/core"
 	"github.com/ncruces/zenity"
@@ -13,6 +14,7 @@ import (
 	"io/ioutil"
 	"net"
 	"net/http"
+	"strings"
 )
 
 var ip *core.Module
@@ -34,10 +36,10 @@ func onReady(item *systray.MenuItem) {
 	update()
 	for {
 		select {
-		case <-wItem.ClickedCh:
-
 		case <-item.ClickedCh:
 			update()
+		case <-wItem.ClickedCh:
+			clipboard.Write(clipboard.FmtText, []byte(info.WIp))
 		case <-pItem.ClickedCh:
 			clipboard.Write(clipboard.FmtText, []byte(info.IP))
 		case <-vItem.ClickedCh:
@@ -74,12 +76,31 @@ func update() {
 		go cpItem(s2, ii)
 	}
 	info = getIpInfo("")
-	pItem.SetTitle(fmt.Sprintf("ip:%s", info.IP))
+	pStr := info.IP
+	resp, err := http.Get("https://ip.gs/country-iso?ip=" + info.IP)
+	if err == nil {
+		all, _ := ioutil.ReadAll(resp.Body)
+		str := string(all)
+		if len(str) >= 2 {
+			pStr += emoji.Gen(string(str[0]), string(str[1]))
+		}
+	}
+	pItem.SetTitle(fmt.Sprintf("ip:%s", pStr))
 	addItem.SetTitle(fmt.Sprintf("地址信息:%s", info.Addr))
 	get, err := http.Get("https://ip.gs")
 	if err == nil {
 		all, _ := ioutil.ReadAll(get.Body)
-		wItem.SetTitle(fmt.Sprintf("外网:%s", string(all)))
+		info.WIp = string(all)
+		wStr := string(all)
+		resp, err = http.Get("https://ip.gs/country-iso?ip=" + strings.ReplaceAll(info.WIp, "\n", ""))
+		if err == nil {
+			all, _ = ioutil.ReadAll(resp.Body)
+			str := string(all)
+			if len(str) >= 2 {
+				wStr += emoji.Gen(string(str[0]), string(str[1]))
+			}
+		}
+		wItem.SetTitle(fmt.Sprintf("外网:%s", wStr))
 	}
 }
 
@@ -94,6 +115,7 @@ type ipInfo struct {
 	Addr        string `json:"addr"`
 	RegionNames string `json:"regionNames"`
 	Err         string `json:"err"`
+	WIp         string
 }
 
 func getIpInfo(ip string) ipInfo {
