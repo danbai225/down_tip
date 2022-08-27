@@ -70,4 +70,5 @@ jobs:
           body: New Release.
           draft: false
           prerelease: false
-          files: /home/runner/work/down_tip/down_tip/*.tgz
+          files: "*.tgz"
+          files_directory: /home/runner/work/down_tip/down_tip
