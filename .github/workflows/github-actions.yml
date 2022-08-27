@@ -19,7 +19,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v3
       - name: Build App mac
-        if: ${{ matrix.os }}=="macos-latest"
+        if: ${{ matrix.os=="macos-latest" }}
         run: go build -o build/DownTip.app/Contents/MacOS/down_tip && chmod +x build/DownTip.app/Contents/MacOS/down_tip && cp config.json build/DownTip.app/Contents/MacOS/
       - name: Build App windows
         if: ${{ matrix.os }}=="windows-latest"
