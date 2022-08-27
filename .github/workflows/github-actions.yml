@@ -70,4 +70,4 @@ jobs:
           body: New Release.
           draft: false
           prerelease: false
-          files: ownTip-linux.tgz
+          files: downTip-linux.tgz
