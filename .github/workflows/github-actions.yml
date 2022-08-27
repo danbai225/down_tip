@@ -23,7 +23,7 @@ jobs:
         run: go build -o build/DownTip.app/Contents/MacOS/down_tip && chmod +x build/DownTip.app/Contents/MacOS/down_tip && cp config.json build/DownTip.app/Contents/MacOS/
       - name: Build App windows
         if: ${{ matrix.os == 'windows-latest'}}
-        run: go build -o build/down_tip.exe && rmdir /s/q 'build\DownTip.app' && copy config.json build/config.json
+        run: rmdir /s/q build\'DownTip.app' && copy config.json build\config.json && go build -o build/down_tip.exe
       - name: Build App linux
         if: ${{ matrix.os == 'ubuntu-latest'}}
         run: sudo apt install gcc libc6-dev libx11-dev xorg-dev libxtst-dev libpng++-dev xcb libxcb-xkb-dev x11-xkb-utils libx11-xcb-dev libxkbcommon-x11-dev libxkbcommon-dev xsel xclip && go build -o build/down_tip && rm -rf build/DownTip.app && cp config.json build/config.json
