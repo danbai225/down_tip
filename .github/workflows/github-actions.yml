@@ -7,7 +7,7 @@ on:
 #    branches:
 #      - main
 jobs:
-  release:
+  build:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -25,12 +25,22 @@ jobs:
       - name: upload artifacts
         uses: actions/upload-artifact@v3.0.0
         with:
-          name: ${{ matrix.os }}
-          path: build/DownTip.app
-      - name: release
+          name: ${{ matrix.os }}.zip
+          path: build
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: publish
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
         with:
-          files: "build/**"
+          tag_name: ${{ github.ref }}
+          name: Release ${{ github.ref }}
+          body: TODO New Release.
+          draft: false
+          prerelease: false
+          files: |
+            LICENSE
+            macos-latest.zip
         env:
           GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
