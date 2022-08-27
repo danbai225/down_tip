@@ -18,9 +18,8 @@ jobs:
         if: ${{ matrix.os == 'macos-latest'}}
         run: |
           go build -ldflags '-w -s' -o build/DownTip.app/Contents/MacOS/down_tip
-          chmod +ux build/DownTip.app/Contents/MacOS/down_tip
           cp config.json build/DownTip.app/Contents/MacOS/
-          tar czf downTip-darwin.tgz build
+          tar czf downTip-darwin.tgz build/*
       - name: Build App windows
         if: ${{ matrix.os == 'windows-latest'}}
         shell: cmd
@@ -29,20 +28,22 @@ jobs:
           md build
           copy config.json build\config.json
           go build -ldflags="-s -w -H windowsgui" -o build\down_tip.exe
-          tar czf downTip-windows.tgz build
+          tar czf downTip-windows.tgz build/*
       - name: Build App linux
         if: ${{ matrix.os == 'ubuntu-latest'}}
         run: |
           sudo apt install gcc libc6-dev libx11-dev xorg-dev libxtst-dev libpng++-dev xcb libxcb-xkb-dev x11-xkb-utils libx11-xcb-dev libxkbcommon-x11-dev libxkbcommon-dev xsel xclip 
           go build -ldflags '-w -s' -o build/down_tip
-          chmod +ux && build/down_tip
           rm -rf build/DownTip.app
           cp config.json build/config.json
-          tar czf downTip-linux.tgz build
+          tar czf downTip-linux.tgz build/*
       - name: upload artifacts
         uses: actions/upload-artifact@v3
         with:
-          path: ./*.tgz
+          path: |
+            downTip-windows.tgz
+            downTip-linux.tgz
+            downTip-darwin.tgz
   release:
     needs: [ build ]
     runs-on: ubuntu-latest
