@@ -50,18 +50,15 @@ jobs:
       - name: pull-macos
         uses: actions/download-artifact@v3
         with:
-          name: macos-latest
-          path: ~/downTip_darwin
+          name: downTip-darwin.tgz
       - name: pull-linux
         uses: actions/download-artifact@v3
         with:
-          name: ubuntu-latest
-          path: downTip_linux
-      - name: pull-macos
+          name: downTip-linux.tgz
+      - name: pull-windows
         uses: actions/download-artifact@v3
         with:
-          name: windows-latest
-          path: downTip_windows
+          name: downTip-windows.tgz
       - name: release
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
