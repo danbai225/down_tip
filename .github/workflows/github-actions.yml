@@ -50,15 +50,17 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: macos-latest
+          path: ~/downTip_darwin
       - name: pull-linux
         uses: actions/download-artifact@v3
         with:
           name: ubuntu-latest
-          path: linux-latest
+          path: ~/downTip_linux
       - name: pull-macos
         uses: actions/download-artifact@v3
         with:
           name: windows-latest
+          path: ~/downTip_windows
       - name: publish
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
@@ -69,8 +71,8 @@ jobs:
           draft: true
           prerelease: false
           files: |
-            macos-latest
-            windows-latest
-            linux-latest
+            ~/downTip_darwin
+            ~/downTip_linux
+            ~/downTip_linux
         env:
           GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
