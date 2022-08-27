@@ -20,7 +20,7 @@ jobs:
         run: |
           go build -ldflags '-w -s' -o build/DownTip.app/Contents/MacOS/down_tip
           cp config.json build/DownTip.app/Contents/MacOS/
-          tar czf downTip-darwin.tgz build/*
+          tar czf downTip.tgz build/*
       - name: Build App windows
         if: ${{ matrix.os == 'windows-latest'}}
         shell: cmd
@@ -29,7 +29,7 @@ jobs:
           md build
           copy config.json build\config.json
           go build -ldflags="-s -w -H windowsgui" -o build\down_tip.exe
-          tar czf downTip-windows.tgz build/*
+          tar czf downTip.tgz.tgz build/*
       - name: Build App linux
         if: ${{ matrix.os == 'ubuntu-latest'}}
         run: |
@@ -37,14 +37,12 @@ jobs:
           go build -ldflags '-w -s' -o build/down_tip
           rm -rf build/DownTip.app
           cp config.json build/config.json
-          tar czf downTip-linux.tgz build/*
+          tar czf downTip.tgz build/*
       - name: upload artifacts
         uses: actions/upload-artifact@v3
         with:
-          path: |
-            downTip-windows.tgz
-            downTip-linux.tgz
-            downTip-darwin.tgz
+          name: ${{ matrix.os }}
+          path: downTip.tgz
   release:
     needs: [ build ]
     runs-on: ubuntu-latest
@@ -52,15 +50,16 @@ jobs:
       - name: pull-macos
         uses: actions/download-artifact@v3
         with:
-          name: downTip-darwin.tgz
-      - name: pull-linux
-        uses: actions/download-artifact@v3
-        with:
-          name: downTip-linux.tgz
-      - name: pull-windows
-        uses: actions/download-artifact@v3
-        with:
-          name: downTip-windows.tgz
+          name: ubuntu-latest
+          path: downTip-linux.tgz
+#      - name: pull-linux
+#        uses: actions/download-artifact@v3
+#        with:
+#          name: downTip-linux.tgz
+#      - name: pull-windows
+#        uses: actions/download-artifact@v3
+#        with:
+#          name: downTip-windows.tgz
       - name: release
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
