@@ -28,6 +28,7 @@ jobs:
         if: ${{ matrix.os == 'windows-latest'}}
         shell: cmd
         run: |
+          dir
           rd /s/q build
           md build
           copy config.json build\config.json
