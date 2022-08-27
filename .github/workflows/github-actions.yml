@@ -55,12 +55,12 @@ jobs:
       - name: pull-mac
         uses: actions/download-artifact@v3
         with:
-          name: downTip-macos.tgz
+          name: macos-latest
           path: downTip-macos
       - name: pull-windows
         uses: actions/download-artifact@v3
         with:
-          name: downTip-windows.tgz
+          name: windows-latest
           path: downTip-windows
       - name: release
         uses: softprops/action-gh-release@v1
