@@ -11,8 +11,8 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-       os: [ windows-latest, macos-latest, ubuntu-latest ]
-       #os: [ macos-latest ]
+       os: [ ubuntu-latest ]
+      #os: [ windows-latest, macos-latest, ubuntu-latest ]
     steps:
       - name: Check out git repository
         uses: actions/checkout@v3
@@ -20,7 +20,7 @@ jobs:
         uses: actions/setup-go@v3
       - name: test
         if: ${{ matrix.os }}==macos-latest
-        run: echo '::set-output ${{ matrix.os }}=="macos-latest"'
+        run: echo 'test'
       - name: Build App mac
         if: ${{ matrix.os }}=="macos-latest"
         run: go build -o build/DownTip.app/Contents/MacOS/down_tip && chmod +x build/DownTip.app/Contents/MacOS/down_tip && cp config.json build/DownTip.app/Contents/MacOS/
