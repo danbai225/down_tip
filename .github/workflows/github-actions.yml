@@ -20,6 +20,7 @@ jobs:
           go build -ldflags '-w -s' -o build/DownTip.app/Contents/MacOS/down_tip
           chmod +ux build/DownTip.app/Contents/MacOS/down_tip
           cp config.json build/DownTip.app/Contents/MacOS/
+          tar czf downTip-darwin.tgz build
       - name: Build App windows
         if: ${{ matrix.os == 'windows-latest'}}
         shell: cmd
@@ -28,6 +29,7 @@ jobs:
           md build
           copy config.json build\config.json
           go build -ldflags="-s -w -H windowsgui" -o build\down_tip.exe
+          tar czf downTip-windows.tgz build
       - name: Build App linux
         if: ${{ matrix.os == 'ubuntu-latest'}}
         run: |
@@ -36,8 +38,7 @@ jobs:
           chmod +ux && build/down_tip
           rm -rf build/DownTip.app
           cp config.json build/config.json
-      - name: Packaging...
-        run: tar czf downTip-${{ matrix.goos }}-${{ matrix.goarch }}.tgz build
+          tar czf downTip-linux.tgz build
       - name: release
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
@@ -48,4 +49,6 @@ jobs:
           draft: false
           prerelease: false
           files: |
-            downTip-${{ matrix.goos }}-${{ matrix.goarch }}.tgz
+            downTip-darwin.tgz
+            downTip-windows.tgz
+            downTip-linux.tgz
