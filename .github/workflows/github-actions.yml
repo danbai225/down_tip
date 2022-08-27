@@ -71,8 +71,8 @@ jobs:
           draft: false
           prerelease: false
           files: |
-            ~/downTip_darwin
-            ~/downTip_linux
-            ~/downTip_linux
+            /home/runner/downTip_darwin
+            /home/runner/downTip_linux
+            /home/runner/downTip_linux
         env:
           GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
