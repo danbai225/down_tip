@@ -29,7 +29,7 @@ jobs:
           md build
           copy config.json build\config.json
           go build -ldflags="-s -w -H windowsgui" -o build\down_tip.exe
-          tar czf downTip-${{ matrix.os }}.tgz.tgz build/*
+          tar czf downTip-${{ matrix.os }}.tgz build/*
       - name: Build App linux
         if: ${{ matrix.os == 'ubuntu-latest'}}
         run: |
