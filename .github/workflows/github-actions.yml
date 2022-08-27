@@ -37,42 +37,14 @@ jobs:
           chmod +ux && build/down_tip
           rm -rf build/DownTip.app
           cp config.json build/config.json
-      - name: upload artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: ${{ matrix.os }}
-          path: build
-  release:
-    needs: [ build ]
-    runs-on: ubuntu-latest
-    steps:
-      - name: pull-macos
-        uses: actions/download-artifact@v3
-        with:
-          name: macos-latest
-          path: ~/downTip_darwin
-      - name: pull-linux
-        uses: actions/download-artifact@v3
-        with:
-          name: ubuntu-latest
-          path: ~/downTip_linux
-      - name: pull-macos
-        uses: actions/download-artifact@v3
-        with:
-          name: windows-latest
-          path: ~/downTip_windows
-      - name: publish
-        uses: softprops/action-gh-release@v1
-        if: startsWith(github.ref, 'refs/tags/')
-        with:
-          tag_name: ${{ github.ref }}
-          name: ${{ github.ref }}
-          body: New Release.
-          draft: false
-          prerelease: false
-          files: |
-            /home/runner/downTip_darwin
-            /home/runner/downTip_linux
-            /home/runner/downTip_linux
+      - name: Packaging...
+        run: tar czf downTip-${{ matrix.goos }}-${{ matrix.goarch }}.tgz build
+      - name: release
+        uses: actions/upload-release-asset@v1.0.2
         env:
-          GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: ./downTip-${{ matrix.goos }}-${{ matrix.goarch }}.tgz
+          asset_name: downTip-${{ matrix.goos }}-${{ matrix.goarch }}.tgz
+          asset_content_type: application/gzip
