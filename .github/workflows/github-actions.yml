@@ -39,11 +39,13 @@ jobs:
       - name: Packaging...
         run: tar czf downTip-${{ matrix.goos }}-${{ matrix.goarch }}.tgz build
       - name: release
-        uses: actions/upload-release-asset@v1.0.2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
         with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./downTip-${{ matrix.goos }}-${{ matrix.goarch }}.tgz
-          asset_name: downTip-${{ matrix.goos }}-${{ matrix.goarch }}.tgz
-          asset_content_type: application/gzip
+          tag_name: ${{ github.ref }}
+          name: Release ${{ github.ref }}
+          body: TODO New Release.
+          draft: false
+          prerelease: false
+          files: |
+            downTip-${{ matrix.goos }}-${{ matrix.goarch }}.tgz
