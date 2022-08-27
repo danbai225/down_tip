@@ -53,6 +53,7 @@ jobs:
         with:
           name: ubuntu-latest
           path: downTip-linux.tgz
+      - name: show
         run: ls
           #path: downTip-linux.tgz
 #      - name: pull-linux
