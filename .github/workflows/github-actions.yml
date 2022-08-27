@@ -19,7 +19,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v3
       - name: test
-        if: ${{ matrix.os == 'macos-latest' }
+        if: ${{ ${{ matrix.os }} == 'macos-latest' }
         run: echo 'test'
       - name: Build App mac
         if: ${{ matrix.os }}=="macos-latest"
