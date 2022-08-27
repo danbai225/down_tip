@@ -2,7 +2,8 @@ name: github-actions
 # 触发条件
 on:
   push:
-
+    tags:
+      - v*
 jobs:
   build:
     runs-on: ${{ matrix.os }}
@@ -63,13 +64,12 @@ jobs:
       - name: release
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
+        run:
+          working-directory: "/home/runner/work/down_tip/down_tip"
         with:
           tag_name: ${{ github.ref }}
           name: Release ${{ github.ref }}
           body: New Release.
           draft: false
           prerelease: false
-          files: |
-            downTip-darwin.tgz
-            downTip-windows.tgz
-            downTip-linux.tgz
+          files: /home/runner/work/down_tip/down_tip/*.tgz
