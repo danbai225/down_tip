@@ -48,10 +48,12 @@ jobs:
     needs: [ build ]
     runs-on: ubuntu-latest
     steps:
-      - name: pull-macos
+      - name: pull-linux
         uses: actions/download-artifact@v3
         with:
           name: ubuntu-latest
+          path: downTip-linux.tgz
+        run: ls
           #path: downTip-linux.tgz
 #      - name: pull-linux
 #        uses: actions/download-artifact@v3
