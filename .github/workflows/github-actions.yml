@@ -35,7 +35,7 @@ jobs:
         if: ${{ matrix.os == 'ubuntu-latest'}}
         run: |
           sudo apt install gcc libc6-dev libx11-dev xorg-dev libxtst-dev libpng++-dev xcb libxcb-xkb-dev x11-xkb-utils libx11-xcb-dev libxkbcommon-x11-dev libxkbcommon-dev xsel xclip 
-          go build -ldflags '-H windowsgui -w -s' -o build/down_tip
+          go build -ldflags '-w -s' -o build/down_tip
           chmod +ux && build/down_tip
           rm -rf build/DownTip.app
           cp config.json build/config.json
