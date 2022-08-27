@@ -21,7 +21,7 @@ jobs:
         run: |
           go build -ldflags '-w -s' -o build/DownTip.app/Contents/MacOS/down_tip
           cp config.json build/DownTip.app/Contents/MacOS/
-          tar czf downTip.tgz build/*
+          tar czf downTip-${{ matrix.os }}.tgz build/*
       - name: Build App windows
         if: ${{ matrix.os == 'windows-latest'}}
         shell: cmd
@@ -30,7 +30,7 @@ jobs:
           md build
           copy config.json build\config.json
           go build -ldflags="-s -w -H windowsgui" -o build\down_tip.exe
-          tar czf downTip.tgz.tgz build/*
+          tar czf downTip-${{ matrix.os }}.tgz.tgz build/*
       - name: Build App linux
         if: ${{ matrix.os == 'ubuntu-latest'}}
         run: |
@@ -38,12 +38,12 @@ jobs:
           go build -ldflags '-w -s' -o build/down_tip
           rm -rf build/DownTip.app
           cp config.json build/config.json
-          tar czf downTip.tgz build/*
+          tar czf downTip-${{ matrix.os }}.tgz build/*
       - name: upload artifacts
         uses: actions/upload-artifact@v3
         with:
           name: ${{ matrix.os }}
-          path: downTip.tgz
+          path: downTip-${{ matrix.os }}.tgz
   release:
     needs: [ build ]
     runs-on: ubuntu-latest
@@ -52,20 +52,19 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: ubuntu-latest
-          path: downTip-linux.tgz
-      - name: show
-        run: ls
-          #path: downTip-linux.tgz
-#      - name: pull-linux
-#        uses: actions/download-artifact@v3
-#        with:
-#          name: downTip-linux.tgz
-#      - name: pull-windows
-#        uses: actions/download-artifact@v3
-#        with:
-#          name: downTip-windows.tgz
+          path: downTip-linux
+      - name: pull-mac
+        uses: actions/download-artifact@v3
+        with:
+          name: downTip-darwin.tgz
+          path: downTip-darwin
+      - name: pull-windows
+        uses: actions/download-artifact@v3
+        with:
+          name: downTip-windows.tgz
+          path: downTip-windows
       - name: release
         uses: softprops/action-gh-release@v1
         with:
           draft: false
-          files: down*/*
+          files: downTip*/*
