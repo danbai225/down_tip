@@ -52,7 +52,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: ubuntu-latest
-          path: downTip-linux.tgz
+          #path: downTip-linux.tgz
 #      - name: pull-linux
 #        uses: actions/download-artifact@v3
 #        with:
@@ -70,5 +70,4 @@ jobs:
           body: New Release.
           draft: false
           prerelease: false
-          files: "*.tgz"
-          files_directory: /home/runner/work/down_tip/down_tip
+          files: ownTip-linux.tgz
