@@ -2,17 +2,17 @@ name: github-actions
 # 触发条件
 on:
   push:
-#    tags:
-#      - v*
-#    branches:
-#      - main
+    tags:
+      - v*
+    branches:
+      - main
 jobs:
   build:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         os: [ windows-latest ]
-        #os: [ windows-latest, macos-latest, ubuntu-latest ]
+        os: [ windows-latest, macos-latest, ubuntu-latest ]
     steps:
       - name: Check out git repository
         uses: actions/checkout@v3
@@ -28,7 +28,6 @@ jobs:
         if: ${{ matrix.os == 'windows-latest'}}
         shell: cmd
         run: |
-          dir
           rd /s/q build
           md build
           copy config.json build\config.json
