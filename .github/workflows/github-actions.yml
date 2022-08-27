@@ -11,24 +11,21 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-       os: [ ubuntu-latest ]
+        os: [ ubuntu-latest ]
       #os: [ windows-latest, macos-latest, ubuntu-latest ]
     steps:
       - name: Check out git repository
         uses: actions/checkout@v3
       - name: Set up Go
         uses: actions/setup-go@v3
-      - name: test
-        if: ${{ matrix.os != 'macos-latest' }}
-        run: echo 'test'
       - name: Build App mac
-        if: ${{ matrix.os }}=="macos-latest"
+        if: ${{ matrix.os == 'macos-latest'}}
         run: go build -o build/DownTip.app/Contents/MacOS/down_tip && chmod +x build/DownTip.app/Contents/MacOS/down_tip && cp config.json build/DownTip.app/Contents/MacOS/
       - name: Build App windows
-        if: ${{ matrix.os }}=="windows-latest"
+        if: ${{ matrix.os == 'windows-latest'}}
         run: go build -o build/down_tip.exe && rmdir build/DownTip.app && copy config.json build/config.json
       - name: Build App linux
-        if: ${{ matrix.os }}=="ubuntu-latest"
+        if: ${{ matrix.os == 'ubuntu-latest'}}
         run: sudo apt install gcc libc6-dev libx11-dev xorg-dev libxtst-dev libpng++-dev xcb libxcb-xkb-dev x11-xkb-utils libx11-xcb-dev libxkbcommon-x11-dev libxkbcommon-dev xsel xclip && go build -o build/down_tip.exe && rmdir build/DownTip.app && cp config.json build/config.json
       - name: upload artifacts
         uses: actions/upload-artifact@v3.0.0
@@ -36,7 +33,7 @@ jobs:
           name: ${{ matrix.os }}
           path: build
   release:
-    needs: [build]
+    needs: [ build ]
     runs-on: ubuntu-latest
     steps:
       - name: publish
