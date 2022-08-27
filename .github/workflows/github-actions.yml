@@ -67,8 +67,8 @@ jobs:
         with:
           tag_name: ${{ github.ref }}
           name: ${{ github.ref }}
-          body: TODO New Release.
-          draft: true
+          body: New Release.
+          draft: false
           prerelease: false
           files: |
             ~/downTip_darwin
