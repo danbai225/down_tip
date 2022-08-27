@@ -2,7 +2,8 @@ name: github-actions
 # 触发条件
 on:
   push:
-
+    tags:
+      - v*
 jobs:
   build:
     runs-on: ${{ matrix.os }}
