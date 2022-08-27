@@ -11,23 +11,29 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-       # os: [ windows-latest, macos-latest, ubuntu-latest ]
-       os: [ macos-latest ]
+       os: [ windows-latest, macos-latest, ubuntu-latest ]
+       #os: [ macos-latest ]
     steps:
       - name: Check out git repository
         uses: actions/checkout@v3
       - name: Set up Go
         uses: actions/setup-go@v3
-      - name: Build App
-        run: go build -o build/DownTip.app/Contents/MacOS/down_tip && cp config.json build/DownTip.app/Contents/MacOS/
-        env:
-          GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+      - name: Build App mac
+        if: ${{ matrix.os }}=="macos-latest"
+        run: go build -o build/DownTip.app/Contents/MacOS/down_tip && chmod +x build/DownTip.app/Contents/MacOS/down_tip && cp config.json build/DownTip.app/Contents/MacOS/
+      - name: Build App windows
+        if: ${{ matrix.os }}=="windows-latest"
+        run: go build -o build/down_tip.exe && rmdir build/DownTip.app && copy config.json build/config.json
+      - name: Build App linux
+        if: ${{ matrix.os }}=="ubuntu-latest"
+        run: go build -o build/down_tip.exe && rmdir build/DownTip.app && cp config.json build/config.json
       - name: upload artifacts
         uses: actions/upload-artifact@v3.0.0
         with:
-          name: ${{ matrix.os }}.zip
+          name: ${{ matrix.os }}
           path: build
   release:
+    needs: [build]
     runs-on: ubuntu-latest
     steps:
       - name: publish
@@ -41,6 +47,8 @@ jobs:
           prerelease: false
           files: |
             LICENSE
-            macos-latest.zip
+            macos-latest
+            windows-latest
+            ubuntu-latest
         env:
           GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
