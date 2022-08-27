@@ -26,6 +26,7 @@ jobs:
           cp config.json build/DownTip.app/Contents/MacOS/
       - name: Build App windows
         if: ${{ matrix.os == 'windows-latest'}}
+        shell: cmd
         run: |
           rd /s/q build
           md build
