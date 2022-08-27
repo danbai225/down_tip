@@ -25,7 +25,7 @@ func main() {
 	}
 	a, err = core.NewApp(func(r *ghttp.Request) {
 		r.Response.RedirectTo("https://github.com/danbai225/down_tip", 302)
-	}, cf, "DownTip", "v1.0.7", nil)
+	}, cf, "DownTip", "v1.0.8", nil)
 	if err != nil {
 		logs.Err(err)
 		return
