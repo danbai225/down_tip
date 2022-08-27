@@ -55,8 +55,8 @@ jobs:
       - name: pull-mac
         uses: actions/download-artifact@v3
         with:
-          name: downTip-darwin.tgz
-          path: downTip-darwin
+          name: downTip-macos.tgz
+          path: downTip-macos
       - name: pull-windows
         uses: actions/download-artifact@v3
         with:
