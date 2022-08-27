@@ -2,8 +2,7 @@ name: github-actions
 # 触发条件
 on:
   push:
-    tags:
-      - v*
+
 jobs:
   build:
     runs-on: ${{ matrix.os }}
@@ -40,13 +39,36 @@ jobs:
           rm -rf build/DownTip.app
           cp config.json build/config.json
           tar czf downTip-linux.tgz build
+      - name: upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          path: ./*.tgz
+  release:
+    needs: [ build ]
+    runs-on: ubuntu-latest
+    steps:
+      - name: pull-macos
+        uses: actions/download-artifact@v3
+        with:
+          name: macos-latest
+          path: ~/downTip_darwin
+      - name: pull-linux
+        uses: actions/download-artifact@v3
+        with:
+          name: ubuntu-latest
+          path: downTip_linux
+      - name: pull-macos
+        uses: actions/download-artifact@v3
+        with:
+          name: windows-latest
+          path: downTip_windows
       - name: release
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
         with:
           tag_name: ${{ github.ref }}
           name: Release ${{ github.ref }}
-          body: TODO New Release.
+          body: New Release.
           draft: false
           prerelease: false
           files: |
