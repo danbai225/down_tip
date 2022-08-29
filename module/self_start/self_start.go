@@ -6,7 +6,6 @@ import (
 	"fyne.io/systray"
 	logs "github.com/danbai225/go-logs"
 	"github.com/danbai225/tipbar/core"
-	"io/ioutil"
 	"os"
 	"os/user"
 	"path/filepath"
@@ -106,7 +105,7 @@ func writer(on bool, path, content string) error {
 	if on {
 		stat, _ := os.Stat(path)
 		if stat == nil {
-			err = ioutil.WriteFile(path, []byte(content), os.ModePerm)
+			err = os.WriteFile(path, []byte(content), os.ModePerm)
 		}
 	} else {
 		err = os.Remove(path)

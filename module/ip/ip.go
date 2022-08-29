@@ -11,7 +11,7 @@ import (
 	"github.com/danbai225/tipbar/core"
 	"github.com/ncruces/zenity"
 	"golang.design/x/clipboard"
-	"io/ioutil"
+	"io"
 	"net"
 	"net/http"
 	"strings"
@@ -79,7 +79,7 @@ func update() {
 	pStr := info.IP
 	resp, err := http.Get("https://ip.gs/country-iso?ip=" + info.IP)
 	if err == nil {
-		all, _ := ioutil.ReadAll(resp.Body)
+		all, _ := io.ReadAll(resp.Body)
 		str := string(all)
 		if len(str) >= 2 {
 			pStr += emoji.Gen(string(str[0]), string(str[1]))
@@ -89,12 +89,12 @@ func update() {
 	addItem.SetTitle(fmt.Sprintf("地址信息:%s", info.Addr))
 	get, err := http.Get("https://ip.gs")
 	if err == nil {
-		all, _ := ioutil.ReadAll(get.Body)
+		all, _ := io.ReadAll(get.Body)
 		info.WIp = string(all)
 		wStr := string(all)
 		resp, err = http.Get("https://ip.gs/country-iso?ip=" + strings.ReplaceAll(info.WIp, "\n", ""))
 		if err == nil {
-			all, _ = ioutil.ReadAll(resp.Body)
+			all, _ = io.ReadAll(resp.Body)
 			str := string(all)
 			if len(str) >= 2 {
 				wStr += emoji.Gen(string(str[0]), string(str[1]))
@@ -130,7 +130,7 @@ func getIpInfo(ip string) ipInfo {
 	if err != nil {
 		logs.Err(err)
 	} else {
-		all, _ := ioutil.ReadAll(get.Body)
+		all, _ := io.ReadAll(get.Body)
 		err = json.Unmarshal([]byte(mahonia.NewDecoder("gbk").ConvertString(string(all))), &i)
 		if err != nil {
 			logs.Err(err)

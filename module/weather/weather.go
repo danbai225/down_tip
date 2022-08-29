@@ -9,7 +9,7 @@ import (
 	"github.com/gogf/gf/frame/g"
 	"github.com/gogf/gf/net/ghttp"
 	"github.com/skratchdot/open-golang/open"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"strings"
 	"time"
@@ -95,7 +95,7 @@ func weatherUpdate(item *systray.MenuItem) {
 		weather.Notify("获取失败:" + err.Error())
 		return
 	}
-	readAll, _ := ioutil.ReadAll(resp.Body)
+	readAll, _ := io.ReadAll(resp.Body)
 	res := Weather{}
 	err = json.Unmarshal(readAll, &res)
 	if err != nil {
@@ -152,7 +152,7 @@ func weatherUpdate(item *systray.MenuItem) {
 	}
 }
 
-//https://open.caiyunapp.com/%E5%BD%A9%E4%BA%91%E5%A4%A9%E6%B0%94_API_%E4%B8%80%E8%A7%88%E8%A1%A8
+// https://open.caiyunapp.com/%E5%BD%A9%E4%BA%91%E5%A4%A9%E6%B0%94_API_%E4%B8%80%E8%A7%88%E8%A1%A8
 func getSkyString(code string) string {
 	switch code {
 	case "CLEAR_DAY":

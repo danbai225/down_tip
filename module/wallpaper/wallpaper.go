@@ -7,7 +7,7 @@ import (
 	logs "github.com/danbai225/go-logs"
 	"github.com/danbai225/tipbar/core"
 	"github.com/ncruces/zenity"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -163,7 +163,7 @@ func changeWallpaper() {
 	_ = os.MkdirAll("./wallpaper", os.ModePerm)
 
 	filename := fmt.Sprintf("./wallpaper/%s.%s", rdata.Data[0].Id, suffix)
-	err = ioutil.WriteFile(filename, data, os.ModePerm)
+	err = os.WriteFile(filename, data, os.ModePerm)
 	if err != nil {
 		logs.Err(err)
 		return
@@ -222,5 +222,5 @@ func httpGet(url string) (data []byte, err error) {
 	if err != nil {
 		return nil, err
 	}
-	return ioutil.ReadAll(resp.Body)
+	return io.ReadAll(resp.Body)
 }
