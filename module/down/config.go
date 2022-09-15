@@ -9,10 +9,10 @@ import (
 	"time"
 )
 
-//配置对象
+// 配置对象
 var conf config
 
-//本地时区
+// 本地时区
 var loc, _ = time.LoadLocation("Local")
 
 // Config 配置文件对象
@@ -25,7 +25,8 @@ type config struct {
 	endMinute         uint
 	DownTimeToday     time.Time
 	StartingTimeToday time.Time
-	Elasticity        bool `json:"elasticity"`
+	Elasticity        bool   `json:"elasticity"`
+	OrderMeal         string `json:"order_meal"`
 }
 
 func (c *config) getStartHour() uint {
@@ -35,7 +36,7 @@ func (c *config) getStartMinute() uint {
 	return c.startMinute
 }
 
-//加载配置
+// 加载配置
 func loadConfiguration() error {
 	//解析配置
 	core.Unmarshal(down.Config, &conf)

@@ -2,10 +2,12 @@ package down
 
 import (
 	"fmt"
-	"log"
+	"github.com/ncruces/zenity"
 	"strconv"
 	"time"
 )
+
+var orderMeal = false
 
 func getTheRemainingTime() string {
 	sub := conf.DownTimeToday.Sub(time.Now())
@@ -15,6 +17,16 @@ func getTheRemainingTime() string {
 	s := uint((tm - time.Duration(m)*time.Minute).Seconds())
 	if s < 0 || s > 60 {
 		return " no Time"
+	}
+	h, m, err := analysisTime(conf.OrderMeal)
+	if err == nil {
+		now := time.Now()
+		if !orderMeal && now.Hour() == int(h) && now.Minute() == int(m) {
+			orderMeal = true
+			_ = zenity.Notify("该点饭啦！！！")
+		} else {
+			orderMeal = false
+		}
 	}
 	return fmt.Sprintf("%s:%s:%s", complementZero(h), complementZero(m), complementZero(s))
 }
@@ -27,7 +39,6 @@ func getStartingTimeToday() string {
 }
 func addStartingTimeToday(duration time.Duration) string {
 	conf.StartingTimeToday = conf.StartingTimeToday.Add(duration)
-	log.Println(conf.StartingTimeToday.Format("15:04:05"))
 	calculateDownTime()
 	return getStartingTimeToday()
 }
