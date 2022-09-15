@@ -18,10 +18,10 @@ func getTheRemainingTime() string {
 	if s < 0 || s > 60 {
 		return " no Time"
 	}
-	h, m, err := analysisTime(conf.OrderMeal)
+	h1, m1, err := analysisTime(conf.OrderMeal)
 	if err == nil {
 		now := time.Now()
-		if !orderMeal && now.Hour() == int(h) && now.Minute() == int(m) {
+		if !orderMeal && now.Hour() == int(h1) && now.Minute() == int(m1) {
 			orderMeal = true
 			_ = zenity.Notify("该点饭啦！！！")
 		} else {

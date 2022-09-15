@@ -20,9 +20,17 @@ func onReady(item *systray.MenuItem) {
 		return
 	}
 	go func() {
+		loadConfig := false
 		for {
 			item.SetTitle("down:" + getTheRemainingTime())
 			time.Sleep(time.Second * 5)
+			now := time.Now()
+			if !loadConfig && now.Hour() == 0 {
+				_ = loadConfiguration()
+				loadConfig = true
+			} else {
+				loadConfig = false
+			}
 		}
 	}()
 	//增加一个今日时间选项
