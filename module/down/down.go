@@ -25,9 +25,11 @@ func onReady(item *systray.MenuItem) {
 			item.SetTitle("down:" + getTheRemainingTime())
 			time.Sleep(time.Second * 5)
 			now := time.Now()
-			if !loadConfig && now.Hour() == 0 {
-				_ = loadConfiguration()
-				loadConfig = true
+			if now.Hour() == 0 {
+				if !loadConfig {
+					_ = loadConfiguration()
+					loadConfig = true
+				}
 			} else {
 				loadConfig = false
 			}

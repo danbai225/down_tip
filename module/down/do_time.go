@@ -21,9 +21,11 @@ func getTheRemainingTime() string {
 	h1, m1, err := analysisTime(conf.OrderMeal)
 	if err == nil {
 		now := time.Now()
-		if !orderMeal && now.Hour() == int(h1) && now.Minute() == int(m1) {
-			orderMeal = true
-			_ = zenity.Notify("该点饭啦！！！")
+		if now.Hour() == int(h1) && now.Minute() == int(m1) {
+			if !orderMeal {
+				orderMeal = true
+				_ = zenity.Notify("该点饭啦！！！")
+			}
 		} else {
 			orderMeal = false
 		}
