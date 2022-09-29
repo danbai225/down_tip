@@ -6,7 +6,7 @@ import (
 	"down_tip/module/keylog"
 	"down_tip/module/qrcode"
 	"down_tip/module/self_start"
-	"down_tip/module/socks5proxy"
+	"down_tip/module/tcp_proxy"
 	"down_tip/module/wallpaper"
 	"down_tip/module/weather"
 	logs "github.com/danbai225/go-logs"
@@ -25,7 +25,7 @@ func main() {
 	}
 	a, err = core.NewApp(func(r *ghttp.Request) {
 		r.Response.RedirectTo("https://github.com/danbai225/down_tip", 302)
-	}, cf, "DownTip", "v1.0.24", nil)
+	}, cf, "DownTip", "v1.1.1", nil)
 	if err != nil {
 		logs.Err(err)
 		return
@@ -37,7 +37,7 @@ func main() {
 		ip.ExportModule(),
 		qrcode.ExportModule(),
 		weather.ExportModule(),
-		socks5proxy.ExportModule(),
+		tcp_proxy.ExportModule(),
 		self_start.ExportModule(),
 		wallpaper.ExportModule(),
 	)

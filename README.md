@@ -10,6 +10,6 @@
 - ip 展示当前ip相关信息
 - keyLog 按键记录
 - weather 天气和预警
-- socks5proxy [代理客户端](github.com/danbai225/tcpproxy)
+- tcpProxy [代理客户端](github.com/danbai225/tcpproxy)
 - qrcode 二维码识别
 - wallpaper 壁纸更换

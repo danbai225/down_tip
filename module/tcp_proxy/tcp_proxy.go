@@ -1,4 +1,4 @@
-package socks5proxy
+package tcp_proxy
 
 import (
 	"fyne.io/systray"
@@ -13,7 +13,7 @@ import (
 	"time"
 )
 
-//https://github.com/danbai225/tcpproxy客户端套壳socks5
+// https://github.com/danbai225/tcpproxy客户端套壳socks5
 var socks5 *core.Module
 
 type socks5Config struct {
@@ -56,7 +56,10 @@ func onReady(item *systray.MenuItem) {
 					pass, _ := zenity.Entry("Password",
 						zenity.Title("请输入Password"))
 					config.Password = pass
-					if host != "" && pass != "" && port != "" {
+					lPort, _ := zenity.Entry("本地端口",
+						zenity.Title("请输入Port"))
+					config.LPort = lPort
+					if host != "" && pass != "" && port != "" && lPort != "" {
 						socks5.SaveConfig(config)
 					} else {
 						continue
@@ -93,6 +96,15 @@ func conn() {
 					logs.Info("连接成功：", ip)
 					break
 				}
+			}
+		} else {
+			client = tcpproxy.Client{}.New(config.Password, config.Host+":"+config.Port, ":"+config.LPort)
+			err := client.Start()
+			connflag = false
+			if err != nil {
+				logs.Err(err)
+			} else {
+				logs.Info("连接成功：", config.Host)
 			}
 		}
 	}()

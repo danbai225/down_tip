@@ -1,7 +1,7 @@
 package ip
 
 import (
-	"down_tip/module/socks5proxy"
+	"down_tip/module/tcp_proxy"
 	"encoding/json"
 	"fmt"
 	"fyne.io/systray"
@@ -120,8 +120,8 @@ type ipInfo struct {
 
 func getIpInfo(ip string) ipInfo {
 	i := ipInfo{}
-	if socks5proxy.IsDomain(ip) {
-		ips := socks5proxy.GetIP(ip, []string{"223.5.5.5", "114.114.114.114", "117.50.10.10", "119.29.29.29"})
+	if tcp_proxy.IsDomain(ip) {
+		ips := tcp_proxy.GetIP(ip, []string{"223.5.5.5", "114.114.114.114", "117.50.10.10", "119.29.29.29"})
 		if len(ips) > 0 {
 			ip = ips[0]
 		}
