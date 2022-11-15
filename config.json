@@ -43,6 +43,10 @@
         "Auto": true,
         "Interval": 1
       }
+    },
+    "screenshot": {
+      "enable": true,
+      "config": null
     }
   },
   "http_port": 7989,
