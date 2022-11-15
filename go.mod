@@ -1,6 +1,6 @@
 module down_tip
 
-go 1.17
+go 1.18
 
 require (
 	fyne.io/systray v1.10.0
@@ -8,7 +8,7 @@ require (
 	github.com/danbai225/flag_emoji v1.0.0
 	github.com/danbai225/go-logs v0.1.9
 	github.com/danbai225/tcpproxy v0.1.0
-	github.com/danbai225/tipbar v0.1.1
+	github.com/danbai225/tipbar v0.1.2
 	github.com/gogf/gf v1.16.9
 	github.com/kbinani/screenshot v0.0.0-20210720154843-7d3a670d8329
 	github.com/makiuchi-d/gozxing v0.1.1
@@ -17,7 +17,7 @@ require (
 	github.com/robotn/gohook v0.40.0
 	github.com/shamsher31/goimgext v1.0.0
 	github.com/skratchdot/open-golang v0.0.0-20200116055534-eef842397966
-	golang.design/x/clipboard v0.6.2
+	golang.design/x/clipboard v0.6.3
 	golang.org/x/image v0.1.0
 )
 
