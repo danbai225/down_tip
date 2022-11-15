@@ -13,3 +13,4 @@
 - socks5proxy [代理客户端](https://github.com/danbai225/tcpproxy)
 - qrcode 二维码识别
 - wallpaper 壁纸更换
+- 屏幕截图

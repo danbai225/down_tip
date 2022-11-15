@@ -5,6 +5,7 @@ import (
 	"down_tip/module/ip"
 	"down_tip/module/keylog"
 	"down_tip/module/qrcode"
+	"down_tip/module/screenshot"
 	"down_tip/module/self_start"
 	"down_tip/module/tcp_proxy"
 	"down_tip/module/wallpaper"
@@ -25,7 +26,7 @@ func main() {
 	}
 	a, err = core.NewApp(func(r *ghttp.Request) {
 		r.Response.RedirectTo("https://github.com/danbai225/down_tip", 302)
-	}, cf, "DownTip", "v1.1.1", nil)
+	}, cf, "DownTip", "v1.2.0", nil)
 	if err != nil {
 		logs.Err(err)
 		return
@@ -40,10 +41,12 @@ func main() {
 		tcp_proxy.ExportModule(),
 		self_start.ExportModule(),
 		wallpaper.ExportModule(),
+		screenshot.ExportModule(),
 	)
 	err = a.Run()
 	if err != nil {
 		logs.Err(err)
 		return
 	}
+
 }

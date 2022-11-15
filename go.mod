@@ -10,6 +10,7 @@ require (
 	github.com/danbai225/tcpproxy v0.1.0
 	github.com/danbai225/tipbar v0.0.8
 	github.com/gogf/gf v1.16.9
+	github.com/kbinani/screenshot v0.0.0-20210720154843-7d3a670d8329
 	github.com/makiuchi-d/gozxing v0.1.1
 	github.com/miekg/dns v1.1.50
 	github.com/ncruces/zenity v0.8.9
@@ -27,15 +28,18 @@ require (
 	github.com/dchest/jsmin v0.0.0-20220218165748-59f39799265f // indirect
 	github.com/fatih/color v1.12.0 // indirect
 	github.com/fsnotify/fsnotify v1.4.9 // indirect
+	github.com/gen2brain/shm v0.0.0-20200228170931-49f9650110c5 // indirect
 	github.com/go-sql-driver/mysql v1.6.0 // indirect
 	github.com/goccy/go-json v0.9.4 // indirect
 	github.com/godbus/dbus/v5 v5.0.4 // indirect
 	github.com/gomodule/redigo v1.8.5 // indirect
 	github.com/gorilla/websocket v1.4.2 // indirect
 	github.com/grokify/html-strip-tags-go v0.0.1 // indirect
+	github.com/jezek/xgb v0.0.0-20210312150743-0e0f116e1240 // indirect
 	github.com/josephspurrier/goversioninfo v1.4.0 // indirect
 	github.com/kpango/fastime v1.1.4 // indirect
 	github.com/kpango/glg v1.6.10 // indirect
+	github.com/lxn/win v0.0.0-20210218163916-a377121e959e // indirect
 	github.com/mattn/go-colorable v0.1.8 // indirect
 	github.com/mattn/go-isatty v0.0.12 // indirect
 	github.com/mattn/go-runewidth v0.0.9 // indirect
