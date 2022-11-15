@@ -15,7 +15,7 @@ import (
 var keyLog *core.Module
 
 func ExportModule() *core.Module {
-	keyLog = core.NewModule("key_log", "按键日志", "记录按键次数", onReady, nil, router)
+	keyLog = core.NewModule("key_log", "按键日志", "记录按键次数", onReady, exit, router)
 	return keyLog
 }
 
@@ -68,8 +68,7 @@ func monitorInput() {
 			KeyName:    v,
 		}
 	}
-	EvChan := hook.Start()
-	defer hook.StopEvent()
+	EvChan := keyLog.RegEvent()
 	for ev := range EvChan {
 		if ev.Kind == hook.KeyHold {
 			//logs.Info(getKeyName(ev.Keycode),ev.Keycode)

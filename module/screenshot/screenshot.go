@@ -49,7 +49,7 @@ func jie() {
 		os.Remove("screencapture.png")
 		return
 	}
-	EvChan := hook.Start()
+	EvChan := screenshot.RegEvent()
 	defer hook.StopEvent()
 	bx, by := int16(0), int16(0)
 	ex, ey := int16(0), int16(0)
