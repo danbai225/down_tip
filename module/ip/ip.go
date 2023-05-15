@@ -14,12 +14,11 @@ import (
 	"io"
 	"net"
 	"net/http"
-	"strings"
 )
 
 var ip *core.Module
 var info ipInfo
-var pItem, vItem, wItem, addItem *systray.MenuItem
+var pItem, vItem, w4Item, w6Item, addItem *systray.MenuItem
 var vip = ""
 
 func ExportModule() *core.Module {
@@ -29,7 +28,8 @@ func ExportModule() *core.Module {
 
 func onReady(item *systray.MenuItem) {
 	pItem = item.AddSubMenuItem("公网:", "")
-	wItem = item.AddSubMenuItem("外网:", "")
+	w4Item = item.AddSubMenuItem("外网v4:", "")
+	w6Item = item.AddSubMenuItem("外网v6:", "")
 	vItem = item.AddSubMenuItem("内网:", "")
 	addItem = item.AddSubMenuItem("地址信息:", "")
 	qItem := item.AddSubMenuItem("ip查询", "点击查询ip信息")
@@ -38,8 +38,10 @@ func onReady(item *systray.MenuItem) {
 		select {
 		case <-item.ClickedCh:
 			update()
-		case <-wItem.ClickedCh:
-			clipboard.Write(clipboard.FmtText, []byte(info.WIp))
+		case <-w4Item.ClickedCh:
+			clipboard.Write(clipboard.FmtText, []byte(info.Wv4Ip))
+		case <-w6Item.ClickedCh:
+			clipboard.Write(clipboard.FmtText, []byte(info.Wv6Ip))
 		case <-pItem.ClickedCh:
 			clipboard.Write(clipboard.FmtText, []byte(info.IP))
 		case <-vItem.ClickedCh:
@@ -87,20 +89,32 @@ func update() {
 	}
 	pItem.SetTitle(fmt.Sprintf("ip:%s", pStr))
 	addItem.SetTitle(fmt.Sprintf("地址信息:%s", info.Addr))
-	get, err := http.Get("https://ip.gs")
+	req, err := http.NewRequest("GET", "https://api-ipv4.ip.sb/ip", nil)
+	if err != nil {
+		logs.Err(err)
+		return
+	}
+	req.Header.Add("User-Agent", "Mozilla/5.0")
+	req.Header.Add("Accept-Language", "en-US")
+	client := &http.Client{}
+	resp, err = client.Do(req)
 	if err == nil {
-		all, _ := io.ReadAll(get.Body)
-		info.WIp = string(all)
-		wStr := string(all)
-		resp, err = http.Get("https://ip.gs/country-iso?ip=" + strings.ReplaceAll(info.WIp, "\n", ""))
-		if err == nil {
-			all, _ = io.ReadAll(resp.Body)
-			str := string(all)
-			if len(str) >= 2 {
-				wStr += emoji.Gen(string(str[0]), string(str[1]))
-			}
-		}
-		wItem.SetTitle(fmt.Sprintf("外网:%s", wStr))
+		ipv4, _ := io.ReadAll(resp.Body)
+		w4Item.SetTitle(fmt.Sprintf("外网v4:%s", ipv4))
+		info.Wv4Ip = string(ipv4)
+	}
+	req, err = http.NewRequest("GET", "https://api-ipv6.ip.sb/ip", nil)
+	if err != nil {
+		logs.Err(err)
+		return
+	}
+	req.Header.Add("User-Agent", "Mozilla/5.0")
+	req.Header.Add("Accept-Language", "en-US")
+	resp, err = client.Do(req)
+	if err == nil {
+		ipv6, _ := io.ReadAll(resp.Body)
+		w6Item.SetTitle(fmt.Sprintf("外网v6:%s", ipv6))
+		info.Wv6Ip = string(ipv6)
 	}
 }
 
@@ -115,7 +129,8 @@ type ipInfo struct {
 	Addr        string `json:"addr"`
 	RegionNames string `json:"regionNames"`
 	Err         string `json:"err"`
-	WIp         string
+	Wv4Ip       string
+	Wv6Ip       string
 }
 
 func getIpInfo(ip string) ipInfo {
